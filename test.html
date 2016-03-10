@@ -1,0 +1,39 @@
+<html lang="zh">
+
+<head>
+    <title>写入文本文件</title>
+</head>
+<script src="node_modules/jquery/dist/jquery.min.js"></script>
+
+<body>
+    <hr>
+    <script language="JavaScript">
+        var js = document.scripts;
+        var jsPath;
+        for (var i = js.length; i > 0; i--) {
+            if (js[i - 1].src.indexOf("test.html") > -1) {
+                jsPath = js[i - 1].src.substring(0, js[i - 1].src.lastIndexOf("/") + 1);
+            }
+        }
+        console.log(jsPath);
+        var ForWriting = 8;
+        var strFile = "\\file.js";
+        var objFSO = new ActiveXObject("Scripting.FileSystemObject");
+        // 检查文件是否存在
+        if (objFSO.FileExists(strFile)) {
+            // 打开文本文件
+            var objStream = objFSO.OpenTextFile(strFile, ForWriting, true, false);
+            // 写入字符串数据
+            var music = '{title: "a",singer: "b"},';
+            objStream.WriteLine(music);
+            document.write("写入文本文件" + strFile + "成功<br>");
+            objStream.Close(); // 关闭文件
+            var os = objFSO.OpenTextFile(strFile, 1, false, false);
+            var json = os.ReadAll() + ']';
+            console.log(json);
+        } else
+            document.write("文本文件: " + strFile + "不存在<br>");
+    </script>
+</body>
+
+</html>

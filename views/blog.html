@@ -1,0 +1,74 @@
+<div class="blog" ng-init='list()'>
+    <ul>
+        <li ng-repeat="blog in blogList">
+            <a href="{{blog.id}}">{{blog.title}}</a>
+        </li>
+    </ul>
+    <a data-toggle="modal" data-target="#cateModal">添加栏目</a>
+    <a data-toggle="modal" data-target="#blogModal" ng-click='showBlogModal()'>添加博客</a>
+    <div class="modal fade" id="cateModal" data-backdrop="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form class="form-horizontal" name="cateForm" ng-submit='submit()'>
+                    <div class="modal-header">
+                        <button class="close" data-dismiss='modal' aria-label="Close"><span aria-hidden='true'>&times;</span>
+                        </button>
+                        <h4 class="modal-title">添加栏目</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group" ng-class="{'has-error':cateForm.name.$dirty&&cateForm.name.$invalid||existCateFlag}">
+                            <label for="" class="col-sm-2 control-label">名称</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="name" ng-model='category.name' ng-blur='existCateName()' required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default" data-dismiss='modal' type="button">关闭</button>
+                        <button class="btn btn-danger" type="submit" ng-disabled="cateForm.$invalid||existCateFlag">立即添加</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div ng-show='cateList' class="modal fade" id="blogModal" data-backdrop="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form class="form-horizontal" name="blogForm" ng-submit='blogSubmit()'>
+                    <div class="modal-header">
+                        <button class="close" data-dismiss='modal' aria-label="Close"><span aria-hidden='true'>&times;</span>
+                        </button>
+                        <h4 class="modal-title">发表博客</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group" ng-class="{'has-error':blogForm.title.$dirty&&blogForm.title.$invalid}">
+                            <label for="" class="col-sm-2 control-label">标题</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="title" ng-model='blog.title' required>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{'has-error':blogForm.category.$dirty&&blogForm.category.$invalid}">
+                            <label for="" class="col-sm-2 control-label">栏目</label>
+                            <div class="col-sm-10">
+                                <select class="form-control" name="category" ng-model='blog.category'>
+                                    <option value="1">请选择分类</option>
+                                    <option ng-repeat="cate in cateList" value="{{cate.id}}">{{cate.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{'has-error':blogForm.content.$dirty&&blogForm.content.$invalid}">
+                            <label for="" class="col-sm-2 control-label">内容</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control" name="content" ng-model='blog.content' required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default" data-dismiss='modal' type="button">关闭</button>
+                        <button class="btn btn-danger" type="submit" ng-disabled="blogForm.$invalid">发表</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,53 +1,158 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
+
+<head>
     <meta charset="UTF-8">
-    <title>Ansux.win</title>
+    <title>小苏梦工厂</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
-  </head>
-  <body>
-    <section class="page-header">
-      <h1 class="project-name">Ansux</h1>
-      <h2 class="project-tagline">Life is a struggle！</h2>
-      </section>
-    <section class="main-content">
-      <h3>
-<a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span class="octicon octicon-link"></span></a>Welcome to Ansux.win.</h3>
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
+    <script src="static/js/jquery.min.js"></script>
+    <script src="static/js/bootstrap.min.js"></script>
+    <script src="static/js/angular.min.js"></script>
+    <script src="static/js/angular-cookie.min.js"></script>
+    <script src="static/js/angular-route.js"></script>
+    <script src="script/app.js"></script>
+    <script src="script/controller.js"></script>
+    <style>
+        .nav-right {
+            float: right;
+            line-height: 50px;
+        }
+        
+        .nav-right a {
+            font-size: 14px;
+            text-decoration: none;
+        }
+        
+        .nav-right a:hover {
+            color: red;
+        }
+        
+        .nav-right span {
+            padding: 0 5px;
+        }
+    </style>
+</head>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here <a href="https://guides.github.com/features/mastering-markdown/">using GitHub Flavored Markdown</a>, select a template crafted by a designer, and publish. After your page is generated, you can check out the new <code>gh-pages</code> branch locally. If you’re using GitHub Desktop, simply sync your repository and you’ll see the new branch.</p>
+<body ng-app='myApp'>
+    <nav class="navbar navbar-default" ng-controller='navCtrl'>
+        <div class="container">
+            <div class="navbar-header">
+                <button class="navbar-toggle collapsed" data-toggle='collapse' data-target='#navCollapse' aria-expanded='false'>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="navbar-brand">
+                    <a href="###">小苏梦工厂</a>
+                </div>
+            </div>
+            <div class="collapse navbar-collapse" id="navCollapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#home">首页</a>
+                    </li>
+                    <li><a href="#music">音乐</a>
+                    </li>
+                    <li><a href="#movie">电影</a>
+                    </li>
+                    <li><a href="#blog">博客</a>
+                    </li>
+                </ul>
+                <div class="nav-right" ng-hide='account.uid'>
+                    <a href="#signinModal" data-toggle="modal">登录</a>
+                    <span>/</span>
+                    <a href="#signupModal" data-toggle="modal">注册</a>
+                </div>
+                <div class="nav-right" ng-show='account.uid'>
+                    <a href="#signinModal" data-toggle="modal">{{account.uid}}</a>
+                    <span>/</span>
+                    <a href="#" ng-click='signout()'>登出</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="content">
+        <div class="container" ng-view>
 
-<h3>
-<a id="designer-templates" class="anchor" href="#designer-templates" aria-hidden="true"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="container">这是底部</div>
+    </div>
+    <div class="modal fade" id="signupModal" data-backdrop="false" ng-controller='signupCtrl'>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form class="form-horizontal" name="signupForm" ng-submit='submit()'>
+                    <div class="modal-header">
+                        <button class="close" data-dismiss='modal' aria-label="Close"><span aria-hidden='true'>&times;</span>
+                        </button>
+                        <h4 class="modal-title">用户注册</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group" ng-class="{'has-error':signupForm.uid.$dirty&&signupForm.uid.$invalid}">
+                            <label for="" class="col-sm-2 control-label">登录名</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="uid" ng-model='user.uid' ng-maxlength='15' required>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{'has-error':signupForm.upwd.$dirty&&signupForm.upwd.$invalid}">
+                            <label for="" class="col-sm-2 control-label">密码</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" name="upwd" ng-model='user.upwd' ng-minlength='3' required>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{'has-error':signupForm.pwd.$dirty&&user.upwd!=user.pwd}">
+                            <label for="" class="col-sm-2 control-label">确认密码</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" name="pwd" ng-model='user.pwd'>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{'has-error':signupForm.email.$dirty&&signupForm.email.$invalid}">
+                            <label for="" class="col-sm-2 control-label">邮箱</label>
+                            <div class="col-sm-10">
+                                <input type="email" class="form-control" name="email" ng-model='user.email' required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default" data-dismiss='modal' type="button">关闭</button>
+                        <button class="btn btn-danger" type="submit" ng-disabled="signupForm.$invalid||user.upwd!=user.pwd">立即注册</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="signinModal" data-backdrop="false" ng-controller='signinCtrl'>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form class="form-horizontal" name="signinForm" ng-submit='submit()'>
+                    <div class="modal-header">
+                        <button class="close" data-dismiss='modal' aria-label="Close"><span aria-hidden='true'>&times;</span>
+                        </button>
+                        <h4 class="modal-title">用户登录</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group" ng-class="{'has-error':signinForm.uid.$dirty&&signinForm.uid.$invalid}">
+                            <label for="" class="col-sm-2 control-label">登录名</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="uid" ng-model='user.uid' ng-maxlength='15' required>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{'has-error':signinForm.upwd.$dirty&&signinForm.upwd.$invalid}">
+                            <label for="" class="col-sm-2 control-label">密码</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" name="upwd" ng-model='user.upwd' ng-minlength='3' required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default" data-dismiss='modal' type="button">关闭</button>
+                        <button class="btn btn-danger" type="submit" ng-disabled="signinForm.$invalid">立即登录</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
 
-<p>We’ve crafted some handsome templates for you to use. Go ahead and click 'Continue to layouts' to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved.</p>
-
-<h3>
-<a id="creating-pages-manually" class="anchor" href="#creating-pages-manually" aria-hidden="true"><span class="octicon octicon-link"></span></a>Creating pages manually</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>
-<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor’s GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>
-<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out our <a href="https://help.github.com/pages">documentation</a> or <a href="https://github.com/contact">contact support</a> and we’ll help you sort it out.</p>
-
-      <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/Ansux/blog">Blog</a> is maintained by <a href="https://github.com/Ansux">Ansux</a>.</span>
-
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
-      </footer>
-
-    </section>
-
-  
-  </body>
 </html>
