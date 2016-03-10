@@ -1,4 +1,4 @@
-var host = "http://localhost/ansux/1/index.php/blogs/";
+var host = "http://ansux.sinaapp.com/blogs/";
 var postConfig = {
    headers: {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
