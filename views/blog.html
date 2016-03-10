@@ -1,4 +1,4 @@
-<div class="blog" ng-init='list()'>
+<div class="blog">
     <ul>
         <li ng-repeat="blog in blogList">
             <a href="{{blog.id}}">{{blog.title}}</a>
@@ -31,7 +31,7 @@
             </div>
         </div>
     </div>
-    <div ng-show='cateList' class="modal fade" id="blogModal" data-backdrop="false">
+    <div class="modal fade" id="blogModal" data-backdrop="false">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form class="form-horizontal" name="blogForm" ng-submit='blogSubmit()'>
