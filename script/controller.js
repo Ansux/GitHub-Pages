@@ -1,4 +1,16 @@
+<<<<<<< HEAD
 var host = "http://localhost/ansux/1/index.php/blogs/";
+=======
+var host = "http://ansux.sinaapp.com/blogs/";
+var postConfig = {
+   headers: {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+   },
+   transformRequest: function (data) {
+      return $.param(data);
+   }
+};
+>>>>>>> fd8274f597cb2a61a864e63a06e4bce81f94168e
 
 angular.module('app.ctrls', [])
     .controller('ctrl.signup', ['$scope', '$http', function ($scope, $http) {
