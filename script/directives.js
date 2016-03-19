@@ -19,6 +19,22 @@ angular.module('app.directives', [])
             }
         };
     }])
+    .directive('masonry', function ($timeout) {
+        return {
+            link: function (scope, ele, attrs, c) {
+                scope.$watch(attrs.ngModel, function () {
+                    $timeout(function () {
+                        var $grid = $('.grid').imagesLoaded(function () {
+                            $grid.masonry({
+                                itemSelector: '.grid-item',
+                                columnWidth: '.grid-item'
+                            });
+                        });
+                    });
+                })
+            }
+        }
+    })
     .directive('contenteditable', function () {
         return {
             restrict: 'A', // only activate on element attribute
