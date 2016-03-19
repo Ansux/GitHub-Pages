@@ -10,7 +10,7 @@ angular.module('app.ctrls', [])
                 console.log(res);
             });
         }
-   }])
+    }])
     .controller('ctrl.signin', ['$scope', '$rootScope', '$http', '$cookieStore', function ($scope, $rootScope, $http, $cookieStore) {
         $rootScope.account = $cookieStore.get('user');
         $scope.user = undefined;
@@ -28,7 +28,7 @@ angular.module('app.ctrls', [])
                 }
             });
         }
-   }])
+    }])
     .controller('ctrl.home', function ($scope, $http) {
         $scope.title = 'i am home page';
     })
@@ -71,7 +71,7 @@ angular.module('app.ctrls', [])
         }
         $scope.title = 'i am otherDetailCtrl page';
     })
-    .controller('ctrl.blog', function ($scope, $http, $timeout, $rootScope) {
+    .controller('ctrl.blog', function ($scope, $http, $rootScope) {
         // 数据初始化
         $scope.blog = {
             category: 1
@@ -81,14 +81,6 @@ angular.module('app.ctrls', [])
                 if (res.length > 2) {
                     $scope.blogList = $.parseJSON(res);
                 }
-                // 获取列表, 内容渲染完成后执行瀑布流
-                $timeout(function () {
-                    $('.grid').masonry({
-                        // options
-                        itemSelector: '.grid-item',
-                        columnWidth: '.grid-item'
-                    });
-                }, 1);
             });
         }
         $scope.getList();
@@ -114,14 +106,6 @@ angular.module('app.ctrls', [])
                     category: 1
                 }
                 $scope.getList();
-                // 获取列表, 内容渲染完成后执行瀑布流
-                $timeout(function () {
-                    $('.grid').masonry({
-                        // options
-                        itemSelector: '.grid-item',
-                        columnWidth: '.grid-item'
-                    });
-                }, 1);
             });
         }
         $scope.title = "所有博客";
@@ -136,17 +120,9 @@ angular.module('app.ctrls', [])
                 $scope.blogList = $.parseJSON(res);
                 $scope.title = 'C：' + $scope.blogList[0].cname;
             }
-            // 获取列表, 内容渲染完成后执行瀑布流
-            $timeout(function () {
-                $('.grid').masonry({
-                    // options
-                    itemSelector: '.grid-item',
-                    columnWidth: '.grid-item'
-                });
-            }, 1);
         });
     })
-    .controller('ctrl.blog.author', function ($scope, $http, $timeout, $routeParams, $location) {
+    .controller('ctrl.blog.author', function ($scope, $rootScope, $http, $routeParams, $location) {
         var id = $routeParams.id;
         if (id == 0) {
             $location.path('/other');
@@ -156,14 +132,6 @@ angular.module('app.ctrls', [])
                 $scope.blogList = $.parseJSON(res);
                 $scope.title = 'U：' + $scope.blogList[0].uid;
             }
-            // 获取列表, 内容渲染完成后执行瀑布流
-            $timeout(function () {
-                $('.grid').masonry({
-                    // options
-                    itemSelector: '.grid-item',
-                    columnWidth: '.grid-item'
-                });
-            }, 1);
         });
     })
     .controller('ctrl.blog.detail', function ($scope, $routeParams, $location, $http, $sce) {
