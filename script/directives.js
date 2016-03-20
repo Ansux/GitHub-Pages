@@ -21,18 +21,22 @@ angular.module('app.directives', [])
     }])
     .directive('masonry', function ($timeout) {
         return {
+            require: 'ngModel',
             link: function (scope, ele, attrs, c) {
-                scope.$watch(attrs.ngModel, function () {
-                    $timeout(function () {
-                        var $grid = $('.grid').imagesLoaded(function () {
-                            $grid.masonry({
-                                itemSelector: '.grid-item',
-                                columnWidth: '.grid-item'
-                            });
-                        });
-                    });
-                })
+
             }
+        }
+    })
+    .directive('scroll', function ($window) {
+        return function (scope, element, attrs) {
+            angular.element($window).bind('scroll', function (e) {
+                if ($(window).scrollTop() >= $(document).height() - $(window).height()) {
+                    if (scope.hasMoreBlogs) {
+                        scope.page += 1;
+                        scope.$apply();
+                    }
+                }
+            })
         }
     })
     .directive('contenteditable', function () {

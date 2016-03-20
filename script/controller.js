@@ -1,24 +1,21 @@
-var host = "http://ansux.sinaapp.com/blogs/";
-angular.module('app.ctrls', [])
-    .controller('ctrl.signup', ['$scope', '$http', function ($scope, $http) {
+angular.module('app.ctrls', ['app.service'])
+    // 用户注册
+    .controller('ctrl.signup', ['$scope', 'User', function ($scope, User) {
         $scope.user = null;
         $scope.submit = function () {
-            $http.post(host + 'user/signup', {
-                user: $scope.user
-            }).success(function (res) {
-                $('#signupModal').modal('hide');
-                console.log(res);
-            });
+            User.sign('signup', $scope.user, function (res) {
+                if (res.status) {
+                    $('#signupModal').modal('hide');
+                }
+            })
         }
     }])
-    .controller('ctrl.signin', ['$scope', '$rootScope', '$http', '$cookieStore', function ($scope, $rootScope, $http, $cookieStore) {
+    // 用户登录
+    .controller('ctrl.signin', ['$scope', '$rootScope', '$cookieStore', 'User', function ($scope, $rootScope, $cookieStore, User) {
         $rootScope.account = $cookieStore.get('user');
         $scope.user = undefined;
         $scope.submit = function () {
-            $http.post(host + 'user/signin', {
-                user: $scope.user
-            }).success(function (res) {
-                res = $.parseJSON(res);
+            User.sign('signin', $scope.user, function (res) {
                 if (res.status) {
                     $('#signinModal').modal('hide');
                     $cookieStore.put('user', res.user);
@@ -29,12 +26,15 @@ angular.module('app.ctrls', [])
             });
         }
     }])
-    .controller('ctrl.home', function ($scope, $http) {
+    // 首页模块
+    .controller('ctrl.home', function ($scope) {
         $scope.title = 'i am home page';
     })
-    .controller('ctrl.music', function ($scope, $http) {
+    // 音乐模块
+    .controller('ctrl.music', function ($scope) {
         $scope.title = 'i am other page';
     })
+    // 音乐详情
     .controller('ctrl.music.detail', function ($scope, $routeParams, $location) {
         var id = $routeParams.id;
         if (id == 0) {
@@ -42,10 +42,11 @@ angular.module('app.ctrls', [])
         }
         $scope.title = 'i am otherDetailCtrl page';
     })
-    .controller('ctrl.movie', function ($scope, $http) {
+    .controller('ctrl.movie', function ($scope, Movie) {
+        $scope.movieApi = '请选择';
         $scope.getApi = function () {
-            $scope.movieApi = '请选择';
-            $http.get(host + 'movie/api?name=' + $scope.name).success(function (res) {
+            Movie.getApi($scope.name, function (res) {
+                console.log(res);
                 $scope.movies = res.data.movie;
                 $scope.movies.num = res.data.num;
             });
@@ -54,14 +55,12 @@ angular.module('app.ctrls', [])
             $scope.movie = $.parseJSON(movie);
         }
         $scope.submit = function () {
-            $http.post(host + 'movie/create', {
+            Movie.create({
                 movie: $scope.movie,
                 review: $scope.review
-            }).success(function (res) {
+            }, function (res) {
 
             });
-            console.log($scope.movie);
-            console.log($scope.review != undefined && $scope.review.content.length != 0);
         }
     })
     .controller('ctrl.movie.detail', function ($scope, $routeParams, $location) {
@@ -71,80 +70,96 @@ angular.module('app.ctrls', [])
         }
         $scope.title = 'i am otherDetailCtrl page';
     })
-    .controller('ctrl.blog', function ($scope, $http, $rootScope) {
+    .controller('ctrl.blog', function ($scope, $rootScope, $timeout, Blog, Category) {
         // 数据初始化
         $scope.blog = {
-            category: 1
+            category: null
         };
-        $scope.getList = function () {
-            $http.get(host + 'blog/getlist').success(function (res) {
-                if (res.length > 2) {
-                    $scope.blogList = $.parseJSON(res);
+
+        $scope.page = 0;
+        // 获取列表
+        function getList() {
+            $scope.hasMoreBlogs = true;
+            Blog.getList(null, $scope.page, function (res) {
+                if (res.length == 0) {
+                    $scope.hasMoreBlogs = false;
                 }
-            });
-        }
-        $scope.getList();
+                for (var i = 0; i < res.length; i++) {
+                    Blog.createItem(res[i]);
+                }
+            })
+        };
 
         $scope.showBlogModal = function () {
-            $http.get(host + 'category/getList', {
-                cache: true
-            }).success(function (res) {
-                $scope.cateList = $.parseJSON(res);
+            Category.getList(function (res) {
+                $scope.cateList = res;
                 if ($scope.cateList) {
-                    $scope.blog.category = $scope.cateList[0].id;
+                    $scope.blog.category = res[0].id;
                 }
             });
         }
+
+        $scope.$watch('page', function () {
+            getList();
+        });
 
         $scope.blogSubmit = function () {
             $scope.blog.author = $rootScope.account.id;
-            $http.post(host + 'blog/create', {
-                blog: $scope.blog
-            }).success(function (res) {
+            Blog.create($scope.blog, function (res) {
                 $('#blogModal').modal('hide');
+                // 初始化表单
                 $scope.blog = {
                     category: 1
-                }
-                $scope.getList();
+                };
+                // 重新获取列表
+                Blog.createItem(res);
             });
         }
         $scope.title = "所有博客";
     })
-    .controller('ctrl.blog.cate', function ($scope, $http, $timeout, $routeParams, $location) {
+    .controller('ctrl.blog.cate', function ($scope, $routeParams, $location, Blog) {
         var id = $routeParams.id;
         if (id == 0) {
             $location.path('/other');
         }
-        $http.get(host + 'blog/getList?cid=' + id).success(function (res) {
-            if (res.length > 2) {
-                $scope.blogList = $.parseJSON(res);
-                $scope.title = 'C：' + $scope.blogList[0].cname;
-            }
-        });
-    })
-    .controller('ctrl.blog.author', function ($scope, $rootScope, $http, $routeParams, $location) {
-        var id = $routeParams.id;
-        if (id == 0) {
-            $location.path('/other');
-        }
-        $http.get(host + 'blog/getList?uid=' + id).success(function (res) {
-            if (res.length > 2) {
-                $scope.blogList = $.parseJSON(res);
-                $scope.title = 'U：' + $scope.blogList[0].uid;
-            }
-        });
-    })
-    .controller('ctrl.blog.detail', function ($scope, $routeParams, $location, $http, $sce) {
-        var id = $routeParams.id;
-        if (id == 0) {
-            $location.path('/other');
-        }
-        $http.get(host + 'blog/detail?id=' + id).success(function (res) {
-            if (res) {
-                $scope.blogInfo = $.parseJSON(res);
-            } else {
 
+        Blog.getList({
+            action: 'cid',
+            id: id
+        }, 0, function (res) {
+            if (res.length > 2) {
+                for (var i = 0; i < res.length; i++) {
+                    Blog.createItem(res[i]);
+                }
+                $scope.title = 'C：' + res[0].cname;
             }
+        });
+    })
+    .controller('ctrl.blog.author', function ($scope, $rootScope, $routeParams, $location, Blog) {
+        var id = $routeParams.id;
+        if (id == 0) {
+            $location.path('/other');
+        }
+
+        Blog.getList({
+            action: 'uid',
+            id: id
+        }, 0, function (res) {
+            if (res.length > 2) {
+                for (var i = 0; i < res.length; i++) {
+                    Blog.createItem(res[i]);
+                }
+                $scope.title = 'U：' + res[0].uid;
+            }
+        });
+    })
+    .controller('ctrl.blog.detail', function ($scope, $routeParams, $location, $sce, Blog) {
+        var id = $routeParams.id;
+        if (id == 0) {
+            $location.path('/other');
+        }
+        Blog.detail(id, function (res) {
+            $scope.blogInfo = res;
         });
         $scope.title = 'i am otherDetailCtrl page';
     });

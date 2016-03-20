@@ -1,11 +1,17 @@
-$('#cateModal').on('hide.bs.modal', function () {
-    $("form[name='cateForm']")[0].reset()
-});
+$(function () {
+    $('#cateModal').on('hide.bs.modal', function () {
+        $("form[name='cateForm']")[0].reset()
+    });
 
-$('#blogModal').on('hide.bs.modal', function () {
-    $("form[name='blogForm']")[0].reset()
-});
+    $('#blogModal').on('hide.bs.modal', function () {
+        $("form[name='blogForm']")[0].reset()
+    });
 
-$("body").scroll(function () {
-    console.log('ddd');
+    $(window).scroll(function () {
+        if ($(window).scrollTop() != 0) {
+            $('.navbar').addClass('navbar-shadow');
+        } else {
+            $('.navbar').removeClass('navbar-shadow');
+        }
+    });
 });
