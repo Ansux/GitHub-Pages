@@ -40,7 +40,7 @@ angular.module('app.ctrls', ['app.service'])
         if (id == 0) {
             $location.path('/other');
         }
-        $scope.title = 'i am otherDetailCtrl page';
+        $scope.title = '音乐详情';
     })
     .controller('ctrl.movie', function ($scope, Movie) {
         $scope.movieApi = '请选择';
@@ -68,7 +68,7 @@ angular.module('app.ctrls', ['app.service'])
         if (id == 0) {
             $location.path('/other');
         }
-        $scope.title = 'i am otherDetailCtrl page';
+        $scope.title = '电影详情';
     })
     .controller('ctrl.blog', function ($scope, $rootScope, $timeout, Blog, Category) {
         // 数据初始化
@@ -84,9 +84,7 @@ angular.module('app.ctrls', ['app.service'])
                 if (res.length == 0) {
                     $scope.hasMoreBlogs = false;
                 }
-                for (var i = 0; i < res.length; i++) {
-                    Blog.createItem(res[i]);
-                }
+                Blog.createItem(res);
             })
         };
 
@@ -107,11 +105,11 @@ angular.module('app.ctrls', ['app.service'])
             $scope.blog.author = $rootScope.account.id;
             Blog.create($scope.blog, function (res) {
                 $('#blogModal').modal('hide');
-                // 初始化表单
+                // 还原表单
                 $scope.blog = {
                     category: 1
                 };
-                // 重新获取列表
+                // 添加数据到列表
                 Blog.createItem(res);
             });
         }
@@ -127,12 +125,8 @@ angular.module('app.ctrls', ['app.service'])
             action: 'cid',
             id: id
         }, 0, function (res) {
-            if (res.length > 2) {
-                for (var i = 0; i < res.length; i++) {
-                    Blog.createItem(res[i]);
-                }
-                $scope.title = 'C：' + res[0].cname;
-            }
+            Blog.createItem(res);
+            $scope.title = 'C:' + res[0].cname;
         });
     })
     .controller('ctrl.blog.author', function ($scope, $rootScope, $routeParams, $location, Blog) {
@@ -145,12 +139,8 @@ angular.module('app.ctrls', ['app.service'])
             action: 'uid',
             id: id
         }, 0, function (res) {
-            if (res.length > 2) {
-                for (var i = 0; i < res.length; i++) {
-                    Blog.createItem(res[i]);
-                }
-                $scope.title = 'U：' + res[0].uid;
-            }
+            Blog.createItem(res);
+            $scope.title = 'U:' + res[0].uid;
         });
     })
     .controller('ctrl.blog.detail', function ($scope, $routeParams, $location, $sce, Blog) {
@@ -161,7 +151,7 @@ angular.module('app.ctrls', ['app.service'])
         Blog.detail(id, function (res) {
             $scope.blogInfo = res;
         });
-        $scope.title = 'i am otherDetailCtrl page';
+        $scope.title = '博客详情';
     });
 
 angular.module('admin.ctrl', []);

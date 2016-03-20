@@ -51,27 +51,35 @@ angular.module('app.service', [])
                 });
             },
             createItem: function (blog) {
-                var $items = $('<div class="grid-item col-lg-3 col-md-4 col-sm-4 col-xs-6">' +
-                    '<div class="thumbnail">' +
-                    '<img src="' + blog.thumb + '" alt="">' +
-                    '<div class="caption">' +
-                    '<h4><a href="#/blog/' + blog.id + '">' + blog.title.substr(0, 20) + '</a></h4>' +
-                    '<p><span>' + blog.cname.substr(0, 2) + '</span>' + blog.digest.substr(0, 60) + '...</p>' +
-                    '</div>' +
-                    '</div>' +
-                    '</div>');
+                if (blog.length === undefined) {
+                    addItem(blog);
+                } else if (blog.length > 0) {
+                    for (var i = 0; i < blog.length; i++) {
+                        addItem(blog[i]);
+                    }
+                }
 
-                // init Masonry
-                var $grid = $('.grid').masonry({
-                    itemSelector: '.grid-item',
-                    columnWidth: '.grid-item'
-                });
-                // layout Masonry after each image loads
-                $grid.imagesLoaded().progress(function () {
-                    $grid.masonry('layout');
-                });
-
-                $grid.append($items).masonry('appended', $items);
+                function addItem(blog) {
+                    var $items = $('<div class="grid-item col-lg-3 col-md-4 col-sm-4 col-xs-6">' +
+                        '<div class="thumbnail">' +
+                        '<img src="' + blog.thumb + '" alt="">' +
+                        '<div class="caption">' +
+                        '<h4><a href="#/blog/' + blog.id + '">' + blog.title.substr(0, 20) + '</a></h4>' +
+                        '<p><span>' + blog.cname.substr(0, 2) + '</span>' + blog.digest.substr(0, 60) + '...</p>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>');
+                    // init Masonry
+                    var $grid = $('.grid').masonry({
+                        itemSelector: '.grid-item',
+                        columnWidth: '.grid-item'
+                    });
+                    // layout Masonry after each image loads
+                    $grid.imagesLoaded().progress(function () {
+                        $grid.masonry('layout');
+                    });
+                    $grid.append($items).masonry('appended', $items);
+                }
             }
         }
     })
