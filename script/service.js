@@ -91,11 +91,17 @@ angular.module('app.service', [])
                 });
             },
             create: function (model, cb) {
+                console.log(model);
                 $http.post(host + 'movie/create', {
                     movie: model.movie,
                     review: model.review
                 }).then(function (res) {
-                    cb(JSON.parse(res.data));
+                    cb(res);
+                });
+            },
+            getList: function (cb) {
+                $http.get(host + 'movie/getlist').then(function (res) {
+                    cb(res);
                 });
             }
         }

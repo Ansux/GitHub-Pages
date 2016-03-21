@@ -39,6 +39,15 @@ angular.module('app.directives', [])
             })
         }
     })
+    .directive('loading', function () {
+        return {
+            restrict: 'A',
+            template: '<div class="loading"><i class="fa fa-spinner fa-spin"></i></div>',
+            link: function (scope, ele, attrs, c) {
+                console.log(scope);
+            }
+        }
+    })
     .directive('contenteditable', function () {
         return {
             restrict: 'A', // only activate on element attribute

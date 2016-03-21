@@ -33,10 +33,6 @@ body {
     padding: 0 5px;
 }
 
-.blog .thumbnail img {
-    width: 100%;
-}
-
 .content {
     margin-top: 80px;
 }
@@ -127,8 +123,21 @@ body {
 .blog .caption span {
     padding: 0 3px;
     background: #ddd;
-    color: #0E677C;
+    color: #666;
     margin-right: 4px;
+}
+
+.blog .thumbnail .caption {
+    color: #999;
+}
+
+.blog .thumbnail .caption a {
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.blog .thumbnail img {
+    width: 100%;
 }
 
 .deckgrid[deckgrid]::before {
@@ -159,6 +168,27 @@ body {
 
 .deckgrid .column-1-1 {
     width: 100%;
+}
+
+.loading {
+    text-align: center;
+}
+
+.loading i {
+    font-size: 50px;
+}
+
+.footer {
+    height: 60px;
+    margin-top: 50px;
+    background: #fff;
+}
+
+.footer .container {
+    border-top: 1px solid #efefef;
+    line-height: 60px;
+    color: #999;
+    text-align: center;
 }
 
 @media screen and (min-width: 1170px) {

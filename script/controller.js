@@ -15,6 +15,7 @@ angular.module('app.ctrls', ['app.service'])
         $rootScope.account = $cookieStore.get('user');
         $scope.user = undefined;
         $scope.submit = function () {
+            $scope.loading = true;
             User.sign('signin', $scope.user, function (res) {
                 if (res.status) {
                     $('#signinModal').modal('hide');
@@ -23,6 +24,7 @@ angular.module('app.ctrls', ['app.service'])
                 } else {
                     console.log(res.msg);
                 }
+                $scope.loading = false;
             });
         }
     }])
@@ -42,26 +44,41 @@ angular.module('app.ctrls', ['app.service'])
         }
         $scope.title = '音乐详情';
     })
-    .controller('ctrl.movie', function ($scope, Movie) {
+    .controller('ctrl.movie', function ($scope, Movie, $rootScope) {
         $scope.movieApi = '请选择';
         $scope.getApi = function () {
+            $scope.loading = true;
             Movie.getApi($scope.name, function (res) {
-                console.log(res);
-                $scope.movies = res.data.movie;
-                $scope.movies.num = res.data.num;
+                if (res.data !== undefined) {
+                    $scope.movies = res.data.movie;
+                    $scope.movies.num = res.data.num;
+                }
+                $scope.loading = false;
             });
         }
         $scope.selectMovie = function (movie) {
             $scope.movie = $.parseJSON(movie);
         }
         $scope.submit = function () {
+            $scope.movie.publisher = $rootScope.account.id;
+            // 整理演员字符串
+            var actorForm = $scope.movie.actor;
+            var actor = [];
+            for (var i = 0; i < actorForm.length; i++) {
+                actor.push(actorForm[i].trim());
+            }
+            $scope.movie.actor = actor.join(',');
             Movie.create({
                 movie: $scope.movie,
                 review: $scope.review
             }, function (res) {
 
             });
-        }
+        };
+
+        Movie.getList(function (res) {
+            $scope.movieList = res;
+        })
     })
     .controller('ctrl.movie.detail', function ($scope, $routeParams, $location) {
         var id = $routeParams.id;
@@ -80,11 +97,16 @@ angular.module('app.ctrls', ['app.service'])
         // 获取列表
         function getList() {
             $scope.hasMoreBlogs = true;
+            $scope.loading = true;
+
             Blog.getList(null, $scope.page, function (res) {
+                Blog.createItem(res);
+                $scope.loading = false;
                 if (res.length == 0) {
                     $scope.hasMoreBlogs = false;
+                    $scope.loading = true;
+                    $scope.msg = "没有更多内容了！"
                 }
-                Blog.createItem(res);
             })
         };
 
