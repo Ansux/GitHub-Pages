@@ -1,4 +1,4 @@
-angular.module('app.directives', [])
+angular.module('app.directives', ['app.service'])
     .directive('ensureUnique', ['$http', function ($http) {
         return {
             require: 'ngModel',
@@ -39,12 +39,74 @@ angular.module('app.directives', [])
             })
         }
     })
+    .directive('requireLogin', function ($rootScope) {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs, ngModel) {
+                var target = attrs.target;
+                scope.$watch('account', function () {
+                    if ($rootScope.account === undefined) {
+                        attrs.$set('data-toggle', 'modal');
+                        attrs.$set('data-target', '#signinModal');
+                    } else {
+                        attrs.$set('data-target', target);
+                    }
+                });
+            }
+        }
+    })
     .directive('loading', function () {
         return {
             restrict: 'A',
             template: '<div class="loading"><i class="fa fa-spinner fa-spin"></i></div>',
             link: function (scope, ele, attrs, c) {
                 console.log(scope);
+            }
+        }
+    })
+    .directive('zan', function (Zan, $rootScope) {
+        return {
+            restrict: 'A',
+            replace: true,
+            scope: {
+                model: '=',
+                type: '='
+            },
+            template: '<span require-login class="zan" ng-class="{\'has-zan\': model.zan}">' +
+                '<i class="fa fa-thumbs-o-up" ng-class="{\'fa-thumbs-up\':model.zan}"></i>' +
+                ' {{model.flower}}' +
+                '</span>',
+            link: function (scope, ele, attrs, c) {
+                ele.on('click', function () {
+                    if ($rootScope.account) {
+                        var zan = {
+                            type: scope.type,
+                            objId: scope.model.id,
+                            user: $rootScope.account.id
+                        };
+                        Zan.save(zan, function (res) {
+                            if (res.action == "create") {
+                                scope.model.flower = parseInt(scope.model.flower) + 1;
+                                scope.model.zan = 1;
+                            } else if (res.action == "delete") {
+                                scope.model.flower = parseInt(scope.model.flower) - 1;
+                                scope.model.zan = null;
+                            }
+                        });
+                    }
+                });
+            }
+        }
+    })
+    .directive('textareaEditor', function () {
+        return {
+            restrict: 'A',
+            link: function (scope, ele, attrs, c) {
+                scope.$watch('review.content', function (newValue, oldValue, scope) {
+                    console.log(scope);
+                    if (scope.review) {}
+                });
+
             }
         }
     })

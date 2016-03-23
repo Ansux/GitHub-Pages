@@ -91,17 +91,64 @@ angular.module('app.service', [])
                 });
             },
             create: function (model, cb) {
-                console.log(model);
+                if (model.review) {
+                    if (model.review.content) {
+                        model.review.content = model.review.content.replace(/\n/g, "<br/>")
+                    }
+                };
                 $http.post(host + 'movie/create', {
                     movie: model.movie,
                     review: model.review
                 }).then(function (res) {
+                    cb(JSON.parse(res.data));
+                });
+            },
+            getList: function (page, uid, cb) {
+                var queryString = 'movie/getlist?page=' + page;
+                if (uid != null) {
+                    queryString += '&uid=' + uid;
+                }
+                $http.get(host + queryString).then(function (res) {
+                    cb(JSON.parse(res.data));
+                });
+            },
+            detail: function (id, uid, cb) {
+                var queryString = '?id=' + id;
+                if (uid !== undefined) {
+                    queryString += ('&uid=' + uid);
+                };
+
+                $http.get(host + 'movie/detail' + queryString).then(function (res) {
+                    cb(JSON.parse(res.data));
+                });
+            }
+        }
+    })
+    .factory('MovieReview', function ($http) {
+        return {
+            create: function (model, cb) {
+                $http.post(host + 'MovieReview/create', {
+                    review: model
+                }).then(function (res) {
                     cb(res);
                 });
             },
-            getList: function (cb) {
-                $http.get(host + 'movie/getlist').then(function (res) {
+            edit: function (model, cb) {
+                $http.post(host + 'MovieReview/edit', {
+                    review: model
+                }).then(function (res) {
                     cb(res);
+                });
+            }
+        }
+    })
+    .factory('Zan', function ($http) {
+        return {
+            save: function (model, cb) {
+                $http.post(host + 'Zan/Create', {
+                    zan: model
+                }).then(function (res) {
+                    cb(JSON.parse(res.data));
                 });
             }
         }

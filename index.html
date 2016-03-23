@@ -47,9 +47,9 @@
                     </li>
                     <li ng-class="{active:path == '/music'}"><a href="#music">音乐</a>
                     </li>
-                    <li ng-class="{active:path == '/movie'}"><a href="#movie">电影</a>
+                    <li ng-class="{active:path.indexOf('/movie')>=0}"><a href="#movie">电影</a>
                     </li>
-                    <li ng-class="{active:path == '/blog'}"><a href="#blog">博客</a>
+                    <li ng-class="{active:path.indexOf('/blog')>=0}"><a href="#blog">博客</a>
                     </li>
                 </ul>
                 <div class="nav-right" ng-hide='account.uid'>
@@ -58,9 +58,9 @@
                     <a data-target="#signupModal" data-toggle="modal">注册</a>
                 </div>
                 <div class="nav-right" ng-show='account.uid'>
-                    <a href="#signinModal" data-toggle="modal">{{account.uid}}</a>
+                    <a href="#signinModal" data-toggle="modal"><i class="fa fa-user"></i> {{account.uid}}</a>
                     <span>/</span>
-                    <a href="#" ng-click='signout()'>登出</a>
+                    <a ng-click='signout()'>登出</a>
                 </div>
             </div>
         </div>

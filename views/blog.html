@@ -1,5 +1,5 @@
 <div class="blog">
-    <p>{{title}} <a data-toggle="modal" data-target="#blogModal" ng-click='showBlogModal()'>添加博客</a>
+    <p>{{title}} <a require-login data-toggle="modal" target="#blogModal" ng-click='showBlogModal()'>添加博客</a>
     </p>
     <div class="clearfix row grid" scroll ng-model="page">
     </div>
@@ -93,7 +93,7 @@
                                         </div>
                                         <input class="pull-right" type="text" data-edit="inserttext" id="voiceBtn" />
                                     </div>
-                                    <div id="editor" ng-model="blog.content" ng-model='blog.content' required data-placeholder="Say Something..." contenteditable></div>
+                                    <div id="editor" ng-model='blog.content' required data-placeholder="Say Something..." contenteditable></div>
                                 </div>
                                 <script src="/static/js/jquery.hotkeys.js"></script>
                                 <script src="/static/js/bootstrap-wysiwyg.min.js"></script>

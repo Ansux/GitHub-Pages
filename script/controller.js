@@ -11,7 +11,7 @@ angular.module('app.ctrls', ['app.service'])
         }
     }])
     // 用户登录
-    .controller('ctrl.signin', ['$scope', '$rootScope', '$cookieStore', 'User', function ($scope, $rootScope, $cookieStore, User) {
+    .controller('ctrl.signin', ['$scope', '$rootScope', '$cookieStore', '$timeout', '$location', 'User', function ($scope, $rootScope, $cookieStore, $timeout, $location, User) {
         $rootScope.account = $cookieStore.get('user');
         $scope.user = undefined;
         $scope.submit = function () {
@@ -19,8 +19,12 @@ angular.module('app.ctrls', ['app.service'])
             User.sign('signin', $scope.user, function (res) {
                 if (res.status) {
                     $('#signinModal').modal('hide');
-                    $cookieStore.put('user', res.user);
-                    $rootScope.account = $cookieStore.get('user');
+                    $timeout(function () {
+                        $cookieStore.put('user', res.user);
+                        $rootScope.account = $cookieStore.get('user');
+                        // 刷新视图
+                        $location.path($rootScope.path + '/');
+                    }, 1000);
                 } else {
                     console.log(res.msg);
                 }
@@ -67,24 +71,105 @@ angular.module('app.ctrls', ['app.service'])
             for (var i = 0; i < actorForm.length; i++) {
                 actor.push(actorForm[i].trim());
             }
-            $scope.movie.actor = actor.join(',');
+            $scope.movie.actor = actor.join('，');
             Movie.create({
                 movie: $scope.movie,
                 review: $scope.review
             }, function (res) {
+                $('#movieModal').modal('hide');
+                // 还原表单
+                $scope.movie = {};
+
+                // 添加数据到列表，并移除最后一条记录
+                $scope.movieList.pop();
+                $scope.movieList.unshift(res);
 
             });
         };
 
-        Movie.getList(function (res) {
-            $scope.movieList = res;
-        })
+        $scope.page = 0;
+
+        function getList() {
+            var uid = null;
+            if ($rootScope.account) {
+                uid = $rootScope.account.id;
+            };
+
+            Movie.getList($scope.page, uid, function (res) {
+                $scope.movieList = res.mlist;
+                $scope.movieCount = res.count;
+
+                var pageNum = 6;
+                var pageCount = $scope.pageCount = ($scope.movieCount % pageNum == 0) ? ($scope.movieCount / pageNum) : (parseInt($scope.movieCount / pageNum) + 1);
+
+                // 分页处理
+                var pager = [];
+                for (var i = 0; i < pageCount; i++) {
+                    pager.push(i);
+                }
+                if ($scope.pager === undefined || $scope.page < 3) {
+                    // 初始(1-5)页
+                    $scope.pager = pager.slice(0, 5);
+                } else if (pager.length - $scope.page < 3) {
+                    // 总页数-当前页码<3，即没有更多页了，截取页码表的最后5个记录
+                    $scope.pager = pager.slice(-5);
+                } else if ($scope.page >= 3) {
+                    // 页码到达第3页以后，默认使当前页 居中显示
+                    $scope.pager = pager.slice(($scope.page - 2), ($scope.page + 3));
+                }
+            });
+        }
+
+        $scope.changePage = function (p) {
+            $scope.page = p;
+        };
+
+        $scope.$watch('page', function () {
+            getList();
+        });
+
     })
-    .controller('ctrl.movie.detail', function ($scope, $routeParams, $location) {
+    .controller('ctrl.movie.detail', function ($scope, $rootScope, $routeParams, $location, Movie, MovieReview) {
         var id = $routeParams.id;
         if (id == 0) {
             $location.path('/other');
-        }
+        };
+
+        var uid = undefined;
+        if ($rootScope.account) {
+            uid = $rootScope.account.id;
+        };
+
+        // 查询电影详情，影评，及当前用户影评
+        Movie.detail(id, uid, function (res) {
+            $scope.movie = res.movie;
+            $scope.reviews = res.reviews;
+            $scope.review = res.userReview;
+            if ($scope.review) {
+                $scope.review.content = $scope.review.content.replace(/<br\/>/ig, "\n");
+            };
+            $scope.slotLimit = (res.movie.slot.length > 100) ? 100 : res.slot.length;
+        });
+
+        $scope.submit = function () {
+            var model = {
+                score: $scope.review.score,
+                content: $scope.review.content.replace(/\n/g, "<br/>")
+            };
+            if ($scope.review.id) {
+                model.id = $scope.review.id;
+                MovieReview.edit(model, function (res) {
+                    $('#reviewModal').modal('hide');
+                });
+            } else {
+                model.writer = $rootScope.account.id;
+                model.movie = $scope.movie.id;
+                MovieReview.create(model, function (res) {
+                    $('#reviewModal').modal('hide');
+                });
+            }
+        };
+
         $scope.title = '电影详情';
     })
     .controller('ctrl.blog', function ($scope, $rootScope, $timeout, Blog, Category) {

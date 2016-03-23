@@ -1,3 +1,120 @@
-<div>
-    电影详情
+<div class="movie-detail">
+    <div class="detail-heading">
+        <h1 class="media-heading" ng-bind-template="{{movie.name}} ({{movie.release_date|limitTo:4}})"></h1>
+    </div>
+    <div class="media">
+        <div class="media-left">
+            <a href="###">
+                <img ng-src="http://movie.apix.cn/fun/image/{{movie.img}}" alt="" class="media-object">
+            </a>
+        </div>
+        <div class="media-body">
+            <p>
+                <span ng-bind-template="导演：{{movie.director}}"></span>
+            </p>
+            <p>
+                <span ng-bind-template="主演：{{movie.actor}}"></span>
+            </p>
+            <p><span ng-bind-template="上映日期：{{movie.release_date}}"></span></p>
+            <p><span ng-bind-template="国家：{{movie.country}}"></span></p>
+            <p><span ng-bind-template="类型：{{movie.type}}"></span></p>
+            <p class="action">
+                <span><i class="fa fa-star"></i> {{movie.rating}}</span>
+                <span><i class="fa fa-thumbs-o-up" ng-class="{'fa-thumbs-up':false}"></i> {{movie.flower}}</span>
+                <span><i class="fa fa-eye"></i> {{movie.pviews}}</span>
+                <span><i class="fa fa-commenting"></i> 10</span>
+            </p>
+            <p class="desc">
+                <span ng-bind-template="简介：{{movie.slot | limitTo: slotLimit}}"></span>
+                <a ng-click="slotLimit=movie.slot.length" ng-show="slotLimit!=movie.slot.length">[展开]</a>
+                <a ng-click="slotLimit=100" ng-show="slotLimit==movie.slot.length">[收起]</a>
+            </p>
+        </div>
+    </div>
+</div>
+<div class="movie-reviews">
+    <div class="header">
+        <h4><i class="fa fa-comments-o"></i> 影评</h4>
+        <a require-login data-toggle="modal" target="#reviewModal">
+            <span ng-if="review===null">发布影评</span>
+            <span ng-if="review!==null">修改我的影评</span>
+        </a>
+    </div>
+    <div ng-if="reviews.length==0">
+        没有数据 <a require-login data-toggle="modal" target="#reviewModal">发布影评</a>
+    </div>
+    <div class="items media" ng-repeat="item in reviews">
+        <div class="media-left">
+            <a href="###">
+                <img ng-src="{{item.face}}" alt="">
+            </a>
+        </div>
+        <div class="media-body">
+            <div class="uid">
+                <a ng-bind="item.uid"></a>
+            </div>
+            <div class="info">
+                <span>{{item.createat}}</span>
+                <span><i class="fa fa-star"></i> {{item.score}}</span>
+                <span><i class="fa fa-thumbs-o-up"></i> {{item.flower}}</span>
+            </div>
+            <div class="desc-box">
+                <div class="desc" ng-bind-html="item.content|toStrusted" ng-class="{'no-hidden':hidden}"></div>
+                <a ng-click="hidden=!hidden">
+                    <span ng-if="!hidden"><i class="fa fa-angle-double-down"></i> 全文</span>
+                    <span ng-if="hidden"><i class="fa fa-angle-double-up"></i> 收起</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="reviewModal" data-backdrop="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" data-dismiss='modal' aria-label="Close"><span aria-hidden='true'>&times;</span>
+                </button>
+                <h4 class="modal-title">发表影评</h4>
+            </div>
+            <form class="form-horizontal" name="reviewForm" ng-submit='submit()'>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">电影</label>
+                        <div class="col-sm-10" style="padding-top:7px; font-weight:bold;">
+                            {{movie.name}}
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error':reviewForm.score.$dirty&&reviewForm.score.$invalid}">
+                        <label for="" class="col-sm-2 control-label">评分</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" ng-model="review.score" name="score" required>
+                                <option value="">请选择</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error':reviewForm.content.$dirty&&reviewForm.content.$invalid}">
+                        <label for="" class="col-sm-2 control-label">内容</label>
+                        <div class="col-sm-10">
+                            <textarea ng-model="review.content" rows="10" class="form-control" placeholder="Say something..." required></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss='modal' type="button">关闭</button>
+                    <button class="btn btn-danger" type="submit" ng-disabled="reviewForm.$invalid"><span>提交内容</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>

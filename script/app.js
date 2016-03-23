@@ -32,12 +32,6 @@ var app = angular.module('myApp', ['ngCookies', 'ngRoute', 'app.ctrls', 'admin.c
       }];
 });
 
-app.run(['$rootScope', '$location', function ($rootScope, $location) {
-    $rootScope.$on('$routeChangeSuccess', function (newV) {
-        $rootScope.path = $location.path()
-    });
-}]);
-
 app.config(function ($routeProvider, $locationProvider) {
     $routeProvider
         .when('/', {
@@ -95,10 +89,18 @@ app.config(function ($routeProvider, $locationProvider) {
     // $locationProvider.html5Mode(true);
 });
 
-app.controller('ctrl.nav', ['$scope', '$rootScope', '$cookieStore', function ($scope, $rootScope, $cookieStore) {
+app.run(['$rootScope', '$location', function ($rootScope, $location) {
+    $rootScope.$on('$routeChangeSuccess', function (newV) {
+        $rootScope.path = $location.path();
+    });
+}]);
+
+app.controller('ctrl.nav', ['$scope', '$rootScope', '$cookieStore', '$location', function ($scope, $rootScope, $cookieStore, $location) {
     $scope.signout = function () {
         $cookieStore.remove('user');
         $rootScope.account = $cookieStore.get('user');
+        // 刷新视图
+        $location.path($rootScope.path + '/');
     }
 }]);
 
@@ -106,4 +108,10 @@ app.filter('toStrusted', ['$sce', function ($sce) {
     return function (html) {
         return $sce.trustAsHtml(html);
     }
-}])
+}]);
+
+app.filter('pagefilter', function () {
+    return function (pager, page) {
+        return pager.push(20);
+    };
+});
