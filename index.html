@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="static/css/style-editor.css">
     <link rel="stylesheet" href="static/css/stylesheet.css">
     <script src="static/js/jquery.min.js"></script>
+    <script src="static/js/jquery.nicescroll.min.js"></script>
     <script src="static/js/bootstrap.min.js"></script>
     <script src="static/js/imagesloaded.pkgd.min.js"></script>
     <script src="static/js/masonry.pkgd.min.js"></script>
@@ -20,12 +21,180 @@
     <script src="static/js/angular-route.js"></script>
     <script src="static/js/angular-resource.min.js"></script>
     <!--    <script src="static/js/angular-deckgrid.min.js"></script>-->
-    <script src="script/jq.js"></script>
     <script src="script/app.js"></script>
     <script src="script/controller.js"></script>
     <script src="script/service.js"></script>
     <script src="script/directives.js"></script>
-
+    <style>
+        .music-global {
+            position: fixed;
+            left: 0;
+            bottom: 50px;
+            width: 420px;
+            height: 80px;
+        }
+        
+        .music-global .global-box {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        
+        .music-global .opacity {
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            background: #000;
+            opacity: 0.75;
+            filter: alpha(opacity=75);
+            z-index: -1;
+        }
+        
+        .global-box a {
+            text-decoration: none;
+            color: #fff;
+        }
+        
+        .global-box a:hover {
+            color: #ccc;
+        }
+        
+        .music-global .control {
+            float: left;
+            padding-left: 20px;
+            height: 80px;
+            margin-right: 20px;
+        }
+        
+        .global-box .control a {
+            line-height: 80px;
+            display: block;
+            float: left;
+            margin-right: 15px;
+            font-size: 20px;
+        }
+        
+        .global-box a.valume {
+            width: 20px;
+        }
+        
+        .control a.play {
+            text-align: center;
+            font-size: 35px;
+        }
+        
+        .global-box .info {
+            margin-top: 15px;
+            color: #ddd;
+            float: left;
+            vertical-align: middle;
+        }
+        
+        .global-box .info .song-name {
+            position: relative;
+            width: 150px;
+            height: 20px;
+            overflow: hidden;
+        }
+        
+        .global-box .info .song-name span {
+            position: absolute;
+            height: 20px;
+            display: inline-block;
+        }
+        
+        .progress-control .pro-bar {
+            width: 150px;
+            height: 2px;
+            margin: 3px 0;
+            background: #000;
+        }
+        
+        .pro-bar .current-progress {
+            background: #fff;
+            height: 2px;
+        }
+        
+        .times {
+            font-size: 12px;
+            color: #efefef;
+        }
+        
+        .times .end {
+            float: right;
+        }
+        
+        .global-box .right-btn {
+            margin-left: 20px;
+            line-height: 80px;
+            float: left;
+        }
+        
+        .global-box .right-btn a {
+            font-size: 18px;
+        }
+        
+        .global-box .like {
+            margin-right: 20px;
+        }
+        
+        .global-box .show {
+            background: #000;
+            opacity: 0.75;
+            filter: alpha(opacity=75);
+            position: absolute;
+            right: -17px;
+            top: 0;
+            bottom: 0;
+            width: 15px;
+            text-align: center;
+            line-height: 80px;
+        }
+        
+        .global-box .show a {
+            font-size: 22px;
+        }
+        
+        .global-box .playlist {
+            background: #000;
+            opacity: 0.75;
+            filter: alpha(opacity=75);
+            height: 350px;
+            position: absolute;
+            top: -352px;
+            left: 0px;
+            right: -17px;
+            padding: 15px;
+            padding-left: 10px;
+        }
+        
+        .global-box .playlist ul {
+            height: 320px;
+            overflow: auto;
+            list-style: none;
+            color: #ddd;
+            padding-left: 10px;
+        }
+        
+        .global-box .playlist ul li {
+            height: 25px;
+            line-height: 25px;
+        }
+        
+        .global-box .playlist li i {
+            margin-right: 6px;
+        }
+        
+        .global-box .playlist .active {
+            color: chocolate;
+        }
+        
+        .music-global .hide-bar {
+            width: 0px;
+        }
+    </style>
 </head>
 
 <body ng-app='myApp'>
@@ -45,7 +214,7 @@
                 <ul class="nav navbar-nav">
                     <li ng-class="{active:path == '/'}"><a href="#home">首页</a>
                     </li>
-                    <li ng-class="{active:path == '/music'}"><a href="#music">音乐</a>
+                    <li ng-class="{active:path.indexOf('/music')>=0}"><a href="#music">音乐</a>
                     </li>
                     <li ng-class="{active:path.indexOf('/movie')>=0}"><a href="#movie">电影</a>
                     </li>
@@ -65,7 +234,7 @@
             </div>
         </div>
     </nav>
-    <div class="content">
+    <div class="content" id="ViewContent">
         <div class="container" ng-view></div>
     </div>
     <div class="footer">
@@ -74,6 +243,69 @@
         </div>
     </div>
     <div class="account-modal" ng-if="account==undefined" ng-include="'views/account-modal.html'"></div>
+    <div class="music-global clearfix">
+        <audio id="audio" autobuffer></audio>
+        <div class="global-box" ng-class="{'hide-bar':!showPlay}">
+            <div ng-init="showPlay=false" ng-show="showPlay">
+                <div class="opacity"></div>
+                <div class="control">
+                    <a ng-click="player.pre()"><i class="fa fa-step-backward"></i></a>
+                    <a ng-click="player.toggle()" class="play"><i class="fa" ng-class="{true:'fa-play-circle-o',false:'fa-pause-circle-o'}[audio.paused]"></i></a>
+                    <a ng-click="player.next()"><i class="fa fa-step-forward"></i></a>
+                    <a class="valume" volume-toggle><i class="fa" ng-class="{true:'fa-volume-off',false:'fa-volume-up'}[audio.volume==0]"></i></a>
+                </div>
+                <div class="info">
+                    <div class="song-name">
+                        <span ng-bind-template="{{nowSong.name}} - {{nowSong.singer}}"></span>
+                    </div>
+                    <div class="progress-control clearfix">
+                        <div class="pro-bar">
+                            <div class="current-progress" style="width:{{100*audio.currentTime/audio.duration}}%"></div>
+                        </div>
+                    </div>
+                    <div class="times">
+                        <span class="start" ng-bind="audio.currentTime|formatTime ">00:00</span>
+                        <span class="end" ng-bind="audio.duration|formatTime">05:20</span>
+                    </div>
+                </div>
+                <div class="right-btn">
+                    <a class="like">
+                        <i class="fa" ng-class="{true:'fa-heart',false:'fa-heart-o'}[true]"></i>
+                    </a>
+                    <a ng-click="showList=!showList">
+                        <i class="fa fa-bars"></i>
+                    </a>
+                </div>
+                <div class="playlist" ng-show="showList">
+                    <ul>
+                        <li ng-repeat="m in songList" ng-click="player.changeSong(m)" ng-class="{'active':m==nowSong}">
+                            <span ng-class="{'active':m==nowSong}">
+                                <i class="fa" ng-class="{true:'fa-play-circle-o',false:'fa-volume-up'}[m!=nowSong]"></i>
+                                <span ng-bind="m.name"></span>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="show">
+                <a ng-click="showPlay=!showPlay">
+                    <i class="fa" ng-class="{true:'fa-angle-left',false:'fa-angle-right'}[showPlay]"></i>
+                </a>
+            </div>
+            <script>
+                $(".playlist ul").niceScroll({
+                    cursorcolor: "#ccc", //#CC0071 光标颜色 
+                    cursoropacitymax: 1, //改变不透明度非常光标处于活动状态（scrollabar“可见”状态），范围从1到0 
+                    touchbehavior: false, //使光标拖动滚动像在台式电脑触摸设备 
+                    cursorwidth: "6px", //像素光标的宽度 
+                    cursorborder: "0", //     游标边框css定义 
+                    cursorborderradius: "6px", //以像素为光标边界半径 
+                    autohidemode: false //是否隐藏滚动条 
+                });
+            </script>
+        </div>
+    </div>
+    <script src="script/jq.js"></script>
 </body>
 
 </html>

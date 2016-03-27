@@ -55,12 +55,54 @@ angular.module('app.directives', ['app.service'])
             }
         }
     })
-    .directive('loading', function () {
+    .directive('progress', function ($rootScope) {
         return {
-            restrict: 'A',
-            template: '<div class="loading"><i class="fa fa-spinner fa-spin"></i></div>',
-            link: function (scope, ele, attrs, c) {
-                console.log(scope);
+            link: function (scope, ele, attrs, ng) {
+                var audio = document.getElementById('audio');
+                ele.bind('click', function (e) {
+                    var rect = ele[0].getBoundingClientRect(); //进度条rect
+                    var beginX = rect.left; //进度条X坐标
+                    var x = e.clientX; //点击点坐标
+                    var percent = (x - beginX) / rect.width; //百分比
+                    percent = percent > 1 ? 1 : percent;
+                    var duration = scope.audio.duration;
+                    var currentTime = duration * percent;
+                    scope.audio.currentTime = currentTime;
+                    $rootScope.player.update();
+                });
+            }
+        }
+    })
+    .directive('volume', function ($rootScope, $cookieStore) {
+        return {
+            link: function (scope, ele, attrs) {
+                var audio = document.getElementById('audio');
+                ele.bind('click', function (e) {
+                    var rect = ele[0].getBoundingClientRect(); //进度条rect
+                    var beginX = rect.left; //进度条X坐标
+                    var x = e.clientX; //点击点坐标
+                    var percent = (x - beginX) / rect.width; //百分比
+                    percent = percent > 1 ? 1 : percent;
+                    scope.audio.volume = percent;
+                    $rootScope.player.update();
+                    $cookieStore.put('volume', percent);
+                });
+            }
+        }
+    })
+    .directive('volumeToggle', function ($rootScope, $cookieStore) {
+        return {
+            link: function (scope, ele, attrs) {
+                ele.bind('click', function (e) {
+                    if (scope.audio.volume > 0) {
+                        attrs.$set('original', scope.audio.volume);
+                        scope.audio.volume = 0;
+                    } else {
+                        scope.audio.volume = attrs.original;
+                    }
+                    $rootScope.player.update();
+                    $cookieStore.put('volume', scope.audio.volume);
+                });
             }
         }
     })
@@ -98,6 +140,65 @@ angular.module('app.directives', ['app.service'])
             }
         }
     })
+    .directive('toolMenu', function () {
+        return {
+            link: function (scope, ele, attrs, ng) {
+                ele.bind('click', function () {
+                    console.log(ele[0].parentNode);
+                });
+            }
+        }
+    })
+    .directive('miniPager', function ($interval) {
+        return {
+            restrict: 'A',
+            replace: true,
+            scope: {
+                pnum: '=',
+                page: '=',
+                rcount: '='
+            },
+            template: '<nav class="clearfix">' +
+                '<ul class="pagination pagination-sm">' +
+                '<li><button ng-disabled="page==0" ng-click="changePage(page-1)" aria-label="Previous">' +
+                '<span aria-hidden="true">&laquo;</span>' +
+                '</button>' +
+                '</li>' +
+                '<li ng-class="{\'active\':page==p}" ng-repeat="p in pager"><a ng-click="changePage(p)">{{p+1}}</a></li>' +
+                '<li>' +
+                '<button ng-disabled="page==(pcount-1)" ng-click="changePage(page+1)" aria-label="Next">' +
+                '<span aria-hidden="true">&raquo;</span>' +
+                '</button>' +
+                '</li>' +
+                '</ul>' +
+                '<div class="page-count" ng-bind-template="(共{{pcount}}页/{{rcount}}条)"></div>' +
+                '</nav>',
+            controller: function ($scope) {},
+            link: function (scope, ele, attrs, ng) {
+                scope.changePage = function (p) {
+                    scope.page = p;
+                };
+                scope.$watch('rcount', function () {
+                    var pageCount = scope.pcount = (scope.rcount % scope.pnum == 0) ? (scope.rcount / scope.pnum) : (parseInt(scope.rcount / scope.pnum) + 1);
+
+                    var pager = [];
+                    for (var i = 0; i < pageCount; i++) {
+                        pager.push(i);
+                    }
+                    if (scope.pager === undefined || scope.page < 3) {
+                        // 初始(1-5)页
+                        scope.pager = pager.slice(0, 5);
+                    } else if (pager.length - scope.page < 3) {
+                        // 总页数-当前页码<3，即没有更多页了，截取页码表的最后5个记录
+                        scope.pager = pager.slice(-5);
+                    } else if (scope.page >= 3) {
+                        // 页码到达第3页以后，默认使当前页 居中显示
+                        scope.pager = pager.slice((scope.page - 2), (scope.page + 3));
+                    }
+                });
+            }
+        }
+    })
     .directive('textareaEditor', function () {
         return {
             restrict: 'A',
@@ -107,6 +208,29 @@ angular.module('app.directives', ['app.service'])
                     if (scope.review) {}
                 });
 
+            }
+        }
+    })
+    .directive('scrollBar', function ($timeout) {
+        return {
+            link: function (scope, ele, attrs, ng) {
+                scope.$watch('songList', function (nv, ov, scope) {
+                    var elm = ele[0];
+                    var scrollHeight = elm.scrollHeight;
+                });
+                ele.bind('click', function () {});
+            }
+        }
+    })
+    .directive('coverHover', function () {
+        return {
+            link: function (scope, ele, attrs, ng) {
+                ele.bind('mouseover', function () {
+                    $(ele[0].children[2]).show();
+                });
+                ele.bind('mouseleave', function () {
+                    $(ele[0].children[2]).hide();
+                });
             }
         }
     })

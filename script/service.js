@@ -91,6 +91,24 @@ angular.module('app.service', [])
                 });
             },
             create: function (model, cb) {
+
+                // 整理演员字符串
+                var actorForm = model.movie.actor;
+                var actor = [];
+
+                if (actorForm.constructor === Array) {
+                    for (var i = 0; i < actorForm.length; i++) {
+                        actor.push(actorForm[i].trim());
+                    }
+                } else if (actorForm.constructor === String) {
+                    var tempArr = actorForm.replace(/,/g, '，').split('，');
+                    for (var i = 0; i < tempArr.length; i++) {
+                        actor.push(tempArr[i].trim());
+                    }
+                };
+
+                model.movie.actor = actor.join('，');
+
                 if (model.review) {
                     if (model.review.content) {
                         model.review.content = model.review.content.replace(/\n/g, "<br/>")
@@ -149,6 +167,45 @@ angular.module('app.service', [])
                     zan: model
                 }).then(function (res) {
                     cb(JSON.parse(res.data));
+                });
+            }
+        }
+    })
+    .factory('Song', function ($http) {
+        return {
+            getList: function (cb) {
+                $http.get(host + 'song/getList').success(function (res) {
+                    cb(JSON.parse(res));
+                });
+            }
+        }
+    })
+    .factory('Tags', function ($http) {
+        return {
+            getList: function (cb) {
+                $http.get(host + 'playlist/GetTagsList').success(function (res) {
+                    cb(JSON.parse(res));
+                });
+            }
+        }
+    })
+    .factory('Playlist', function ($http) {
+        return {
+            getList: function (cb) {
+                $http.get(host + 'playlist/getlist').success(function (res) {
+                    cb(JSON.parse(res));
+                });
+            },
+            create: function (model, cb) {
+                $http.post(host + 'playlist/create', {
+                    playlist: model
+                }).success(function (res) {
+                    cb(JSON.parse(res));
+                });
+            },
+            detail: function (id, cb) {
+                $http.get(host + 'playlist/detail?id=' + id).success(function (res) {
+                    cb(JSON.parse(res));
                 });
             }
         }

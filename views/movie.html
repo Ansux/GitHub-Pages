@@ -24,7 +24,6 @@
             <p class="action">
                 <span><i class="fa fa-star"></i> {{movie.rating}}</span>
                 <span zan model="movie" type="1"></span>
-                <!-- <span require-login class="zan" ng-click="zan(movie.id, movie)" ng-class="{'has-zan':movie.zan}"><i ng-model="movie.zid" class="fa fa-thumbs-o-up" ng-class="{'fa-thumbs-up':movie.zan}"></i> {{movie.flower}}</span>-->
                 <span><i class="fa fa-eye"></i> {{movie.pviews}}</span>
                 <span><i class="fa fa-commenting"></i> 10</span>
             </p>
@@ -33,22 +32,25 @@
             </p>
         </div>
     </div>
+    <div mini-pager pnum="pageNum" page="page" rcount="movieCount"></div>
+    <!--
     <nav class="clearfix">
-        <ul class="pagination pagination-sm">
-            <li>
-                <button ng-disabled="page==0" ng-click="changePage(page-1)" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </button>
-            </li>
-            <li ng-class="{'active':page==p}" ng-repeat="p in pager"><a ng-click="changePage(p)">{{p+1}}</a></li>
-            <li>
-                <button ng-disabled="page==(pageCount-1)" ng-click="changePage(page+1)" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </button>
-            </li>
-        </ul>
-        <div class="page-count" ng-bind-template="(共{{pageCount}}页/{{movieCount}}条)"></div>
-    </nav>
+    <ul class="pagination pagination-sm">
+        <li>
+            <button ng-disabled="page==0" ng-click="changePage(page-1)" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </button>
+        </li>
+        <li ng-class="{'active':page==p}" ng-repeat="p in pager"><a ng-click="changePage(p)">{{p+1}}</a></li>
+        <li>
+            <button ng-disabled="page==(pageCount-1)" ng-click="changePage(page+1)" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </button>
+        </li>
+    </ul>
+    <div class="page-count" ng-bind-template="(共{{pageCount}}页/{{movieCount}}条)"></div>
+</nav>
+-->
 </div>
 <div class="modal fade" id="movieModal" data-backdrop="false">
     <div class="modal-dialog modal-lg">

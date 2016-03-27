@@ -1,0 +1,41 @@
+<div class="pl-detail">
+    <div class="cover">
+        <img ng-src="{{plInfo.cover}}" alt="">
+    </div>
+    <div class="info">
+        <div class="title">{{plInfo.name}}</div>
+        <div class="creator">
+            {{plInfo.uid}} {{plInfo.createat}}
+        </div>
+        <div class="control">
+            <div class="input-group">
+                <button type="button" class="form-control"><i class="fa fa-play-circle-o"></i>播放全部</button>
+                <span class="input-group-addon" id="basic-addon2"><i class="fa fa-plus"></i></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="s-list">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>喜欢</th>
+                <th>歌名</th>
+                <th>歌手</th>
+                <th>评论数</th>
+                <th>时长</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="s in plInfo.songList">
+                <td ng-bind="$index+1|add0"></td>
+                <td><i class="fa fa-heart-o"></i></td>
+                <td ng-bind="s.name"></td>
+                <td ng-bind="s.singer"></td>
+                <td ng-bind="s.comments"></td>
+                <td ng-bind="(s.playtime/1000)|formatTime"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

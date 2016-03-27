@@ -2,6 +2,14 @@ body {
     font-family: "微软雅黑"
 }
 
+a {
+    transition: all 0.2s ease-in-out;
+    -moz-transition: all 0.2s ease-in-out;
+    -webkit-transition: all 0.2s ease-in-out;
+    -o-transition: all 0.2s ease-in-out;
+    text-decoration: none;
+}
+
 .navbar-brand a {
     text-decoration: none;
 }
@@ -176,7 +184,7 @@ body {
 }
 
 .loading i {
-    font-size: 50px;
+    font-size: 32px;
 }
 
 .footer {
@@ -378,6 +386,260 @@ body {
 .movie-reviews .no-hidden {
     height: auto;
 }
+
+
+/* music */
+
+.warp {}
+
+.player .control {
+    margin-bottom: 5px;
+}
+
+.player .control a {
+    display: block;
+    float: left;
+    text-decoration: none;
+    color: #666;
+    font-size: 20px;
+    width: 30px;
+    height: 30px;
+    margin-right: 24px;
+}
+
+.player .control a i {
+    display: block;
+    width: 26px;
+    height: 26px;
+    text-align: center;
+    line-height: 26px;
+}
+
+.player {
+    position: absolute;
+    padding: 10px;
+    width: 260px;
+    height: 430px;
+    background: #efefef;
+}
+
+.player .cover {
+    width: 240px;
+    height: 240px;
+    background: #fff;
+}
+
+.player .cover img {
+    width: 100%;
+}
+
+.player .progress {
+    position: relative;
+}
+
+.song-progress {
+    margin-left: -10px;
+    width: 260px;
+    height: 2px;
+    background: #E2E2E2;
+    border-radius: 0px;
+}
+
+.player .info h3 {
+    height: 22px;
+    overflow: hidden;
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.player .times {
+    color: #999;
+    float: left;
+    margin-right: 10px;
+}
+
+.player .times em {
+    font-style: normal;
+    padding: 0 2px;
+}
+
+.player .current-time {
+    font-size: 20px;
+}
+
+.player .volume {
+    float: left;
+}
+
+.player .volume .progress {
+    width: 60px;
+    height: 6px;
+    margin-top: 13px;
+    margin-bottom: 0px;
+}
+
+.player .volume a {
+    display: block;
+    float: left;
+    margin-top: 6px;
+    color: #666;
+    margin-right: 5px;
+}
+
+.player .share {
+    float: right;
+    margin-right: 10px;
+    font-size: 22px;
+    color: #666;
+}
+
+.player-container {
+    margin-top: 150px;
+    position: relative;
+    height: 430px;
+    margin-bottom: 50px;
+}
+
+.music-list {
+    position: relative;
+    max-width: 500px;
+    padding: 10px;
+    margin-left: 260px;
+    height: 430px;
+    overflow: hidden;
+    background: #efefef;
+    filter: alpha(opacity=50);
+    -moz-opacity: 0.5;
+    opacity: 0.5;
+}
+
+.music-list .pl-item {
+    margin-left: 20px;
+    background: rgba(198, 211, 205, 0.5);
+    padding: 0 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.songlist {
+    height: 360px;
+    margin-top: 10px;
+    padding-right: 10px;
+}
+
+.songlist ul {
+    list-style: none;
+    margin-bottom: 0px;
+    padding-left: 0px;
+}
+
+.songlist li {
+    height: 30px;
+    line-height: 30px;
+}
+
+.songlist li i {
+    margin-right: 3px;
+}
+
+.songlist li.active {
+    color: chocolate;
+}
+
+.songlist li strong {
+    display: block;
+    float: left;
+    width: 20px;
+    font-weight: normal;
+    margin-right: 3px;
+}
+
+.music-list .play-ico {
+    margin-right: -5px;
+    color: #666;
+    text-decoration: none;
+    font-size: 20px;
+    float: right;
+}
+
+.music-list .head {
+    border-bottom: solid 1px #efefef;
+    height: 40px;
+    line-height: 40px;
+}
+
+#viewContent {
+    overflow: auto;
+}
+
+body {
+    overflow: hidden;
+}
+
+.pl-box {}
+
+.pl-container {}
+
+.pl-container .close a {
+    color: #fff;
+    font-size: 36px;
+}
+
+.pl-box .cover img {
+    width: 100%;
+}
+
+.pl-item {
+    border-radius: 3px;
+    border: solid 1px #ccc;
+    margin-bottom: 30px;
+}
+
+.pl-item .name {
+    background: #efefef;
+    padding: 5px;
+}
+
+.pl-box .title {
+    padding: 10px 15px;
+    margin-bottom: 10px;
+}
+
+.pl-item .cover {
+    position: relative;
+}
+
+.pl-box .creator {
+    color: #ccc;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}
+
+.pl-box .play-btn {
+    display: none;
+    color: #ccc;
+    position: absolute;
+    font-size: 32px;
+    bottom: 2px;
+    right: 10px;
+}
+
+.pl-box .title a {
+    color: #666;
+    text-decoration: none;
+}
+
+.pl-box .title i {
+    margin-right: 2px;
+}
+
+.pl-box .title .pull-right {
+    margin-left: 10px;
+}
+
+
+/* music */
 
 @media (min-width: 1200px) {
     .container {

@@ -1,0 +1,27 @@
+<div class="s-list">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>操作</th>
+                <th>歌名</th>
+                <th>歌手</th>
+                <th>评论数</th>
+                <th>时长</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="s in allSongs">
+                <td ng-bind="$index+1|add0"></td>
+                <td>
+                    <a><i class="fa fa-heart-o"></i></a>
+                    <a tool-menu><i class="fa fa-plus-square-o"></i></a>
+                </td>
+                <td ng-bind="s.name"></td>
+                <td ng-bind="s.singer"></td>
+                <td ng-bind="s.comments"></td>
+                <td ng-bind="(s.playtime/1000)|formatTime"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

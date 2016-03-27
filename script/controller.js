@@ -37,11 +37,93 @@ angular.module('app.ctrls', ['app.service'])
         $scope.title = 'i am home page';
     })
     // 音乐模块
-    .controller('ctrl.music', function ($scope) {
-        $scope.title = 'i am other page';
+    .controller('ctrl.music', function ($scope, $rootScope, $http, $interval, $timeout, Tags, Playlist) {
+        $scope.search = function () {
+            $http.get('/static/json/remix.json').success(function (res) {
+                $scope.meList = res;
+                console.log(res.length);
+            });
+        }
+
+        if ($rootScope.account) {
+            $scope.userId = $rootScope.account.id;
+        }
+        $scope.create = function () {
+            for (var i = 0; i < $scope.meList.length; i++) {
+                var song = {
+                    name: $scope.meList[i].name,
+                    singer: $scope.meList[i].artists[0].name,
+                    mp3Url: $scope.meList[i].mp3Url.substring(24),
+                    picUrl: $scope.meList[i].album.picUrl.substring(24),
+                    playTime: $scope.meList[i].lMusic.playTime,
+                    publisher: $scope.userId
+                };
+                $http.post(host + 'song/create', {
+                    song: song
+                }).success(function (res) {
+                    console.log(res);
+                });
+            }
+        };
+
+        $scope.show = function (pl) {
+            if (pl.songlist == undefined) {
+                Playlist.detail(pl.id, function (res) {
+                    pl.songlist = res;
+                    pl.show = true;
+                });
+            }
+            pl.show = !pl.show;
+        }
+
+        if ($rootScope.playlists === undefined) {
+            Playlist.getList(function (res) {
+                $rootScope.playlists = res;
+                $rootScope.musicList = res[0];
+            });
+        }
+
+        $scope.showPlaylistForm = function () {
+            Tags.getList(function (res) {
+                $scope.tags = res;
+            });
+        };
+
+        $scope.changePlayList = function (pl) {
+            $rootScope.musicList = pl.songlist;
+            $rootScope.nowSong = pl.songlist[0];
+            $rootScope.player.play();
+        }
+
+        $scope.submit = function () {
+            $scope.playlist.creator = $scope.userId;
+            Playlist.create($scope.playlist, function (res) {
+                $scope.playlists.push(res);
+                $('#listModal').modal('hide');
+            });
+        };
+
     })
-    // 音乐详情
-    .controller('ctrl.music.detail', function ($scope, $routeParams, $location) {
+    .controller('ctrl.music.pl', function ($scope) {
+
+    })
+    .controller('ctrl.music.pl.detail', function ($scope, $routeParams, $location, Playlist) {
+        var id = $routeParams.id;
+        if (id == 0) {
+            $location.path('/other');
+        }
+        Playlist.detail(id, function (res) {
+            $scope.plInfo = res.plInfo;
+            $scope.plInfo.songList = res.songList;
+        });
+        $scope.title = '音乐详情';
+    })
+    .controller('ctrl.music.sl', function ($scope, Song) {
+        Song.getList(function (res) {
+            $scope.allSongs = res;
+        });
+    })
+    .controller('ctrl.music.song.detail', function ($scope, $routeParams, $location) {
         var id = $routeParams.id;
         if (id == 0) {
             $location.path('/other');
@@ -65,13 +147,7 @@ angular.module('app.ctrls', ['app.service'])
         }
         $scope.submit = function () {
             $scope.movie.publisher = $rootScope.account.id;
-            // 整理演员字符串
-            var actorForm = $scope.movie.actor;
-            var actor = [];
-            for (var i = 0; i < actorForm.length; i++) {
-                actor.push(actorForm[i].trim());
-            }
-            $scope.movie.actor = actor.join('，');
+
             Movie.create({
                 movie: $scope.movie,
                 review: $scope.review
@@ -81,7 +157,7 @@ angular.module('app.ctrls', ['app.service'])
                 $scope.movie = {};
 
                 // 添加数据到列表，并移除最后一条记录
-                $scope.movieList.pop();
+                // $scope.movieList.pop();
                 $scope.movieList.unshift(res);
 
             });
@@ -98,32 +174,13 @@ angular.module('app.ctrls', ['app.service'])
             Movie.getList($scope.page, uid, function (res) {
                 $scope.movieList = res.mlist;
                 $scope.movieCount = res.count;
-
-                var pageNum = 6;
-                var pageCount = $scope.pageCount = ($scope.movieCount % pageNum == 0) ? ($scope.movieCount / pageNum) : (parseInt($scope.movieCount / pageNum) + 1);
-
-                // 分页处理
-                var pager = [];
-                for (var i = 0; i < pageCount; i++) {
-                    pager.push(i);
-                }
-                if ($scope.pager === undefined || $scope.page < 3) {
-                    // 初始(1-5)页
-                    $scope.pager = pager.slice(0, 5);
-                } else if (pager.length - $scope.page < 3) {
-                    // 总页数-当前页码<3，即没有更多页了，截取页码表的最后5个记录
-                    $scope.pager = pager.slice(-5);
-                } else if ($scope.page >= 3) {
-                    // 页码到达第3页以后，默认使当前页 居中显示
-                    $scope.pager = pager.slice(($scope.page - 2), ($scope.page + 3));
-                }
+                $scope.pageNum = 6;
             });
         }
 
         $scope.changePage = function (p) {
             $scope.page = p;
         };
-
         $scope.$watch('page', function () {
             getList();
         });
@@ -204,6 +261,9 @@ angular.module('app.ctrls', ['app.service'])
             });
         }
 
+        $scope.loadMore = function () {
+            $scope.page = $scope.page + 1;
+        }
         $scope.$watch('page', function () {
             getList();
         });
