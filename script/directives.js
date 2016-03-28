@@ -143,9 +143,53 @@ angular.module('app.directives', ['app.service'])
     .directive('toolMenu', function () {
         return {
             link: function (scope, ele, attrs, ng) {
-                ele.bind('click', function () {
-                    console.log(ele[0].parentNode);
+                var toolBar = document.getElementById('addToPL');
+                ele.bind('click', function (e) {
+                    var x = e.clientX;
+                    var y = e.clientY;
+                    $(toolBar).show();
+                    $(toolBar).css('left', x + 5);
+                    $(toolBar).css('top', y);
+
+                    $(toolBar).attr('sid', scope.s.id);
+
+                    $(ele[0].parentNode.parentNode).siblings().removeClass('active');
+                    $(ele[0].parentNode.parentNode).addClass('active');
+
+                    return false;
                 });
+            }
+        }
+    })
+    .directive('sitem', function () {
+        return {
+            link: function (scope, ele, attrs, ng) {
+                var toolBar = document.getElementById('addToPL');
+
+                ele.bind('click', function (e) {
+                    $(ele).siblings().removeClass('active');
+                    $(ele).addClass('active');
+                    $(toolBar).hide();
+                });
+            }
+        }
+    })
+    .directive('addToPlaylist', function (Playlist) {
+        return {
+            link: function (scope, ele, attrs, ng) {
+                var toolBar = document.getElementById('addToPL');
+
+                ele.bind('click', function () {
+                    var sid = $(toolBar).attr('sid');
+                    var pid = scope.pl.id;
+
+                    Playlist.updateSongs(sid, pid, "add", function (res) {
+                        if (res === 1) {
+                            $(toolBar).hide();
+                        }
+                    });
+
+                })
             }
         }
     })
@@ -156,7 +200,8 @@ angular.module('app.directives', ['app.service'])
             scope: {
                 pnum: '=',
                 page: '=',
-                rcount: '='
+                rcount: '=',
+                source: '='
             },
             template: '<nav class="clearfix">' +
                 '<ul class="pagination pagination-sm">' +
@@ -178,9 +223,8 @@ angular.module('app.directives', ['app.service'])
                 scope.changePage = function (p) {
                     scope.page = p;
                 };
-                scope.$watch('rcount', function () {
+                scope.$watch('source', function () {
                     var pageCount = scope.pcount = (scope.rcount % scope.pnum == 0) ? (scope.rcount / scope.pnum) : (parseInt(scope.rcount / scope.pnum) + 1);
-
                     var pager = [];
                     for (var i = 0; i < pageCount; i++) {
                         pager.push(i);
@@ -219,6 +263,49 @@ angular.module('app.directives', ['app.service'])
                     var scrollHeight = elm.scrollHeight;
                 });
                 ele.bind('click', function () {});
+            }
+        }
+    })
+    .directive('roll', function ($interval, $timeout) {
+        return {
+            link: function (scope, ele, attrs, ng) {
+                var marqueeVar;
+                scope.roll = function () {
+                    var obj = ele[0].parentNode;
+                    var obj1 = ele[0].children[0];
+                    var obj2 = ele[0].children[1];
+                    // 延迟执行，等待ng渲染完成
+                    $timeout(function () {
+                        // 曲目信息内容超出父容器
+                        if (obj.offsetWidth < obj1.offsetWidth) {
+                            obj2.innerText = obj1.innerText;
+                            $interval.cancel(marqueeVar);
+
+                            marqueeVar = $interval(function () {
+                                if (obj2.offsetWidth - (obj.scrollLeft - 60) <= 0) {
+                                    $interval.cancel(marqueeVar);
+                                    marqueeVar = undefined;
+                                    obj.scrollLeft = 0;
+                                    // 曲目信息循环一圈后，暂停3秒钟后继续执行。
+                                    setTimeout(function () {
+                                        scope.roll();
+                                    }, 3000);
+                                } else {
+                                    obj.scrollLeft++;
+                                }
+                            }, 20);
+                        } else {
+                            $interval.cancel(marqueeVar);
+                            marqueeVar = undefined;
+                            obj2.innerText = "";
+                        }
+                    });
+                }
+
+                // 监听当前曲目
+                scope.$watch('nowSong', function () {
+                    scope.roll();
+                });
             }
         }
     })

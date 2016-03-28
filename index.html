@@ -92,18 +92,20 @@
             vertical-align: middle;
         }
         
-        .global-box .info .song-name {
-            position: relative;
+        .global-box .song-name {
             width: 150px;
             height: 20px;
             overflow: hidden;
         }
         
-        .global-box .info .song-name span {
-            position: absolute;
+        .global-box .song-name .text {
+            width: 800px;
+            word-break: keep-all;
+            white-space: nowrap;
             height: 20px;
-            display: inline-block;
         }
+        
+        .global-box .song-name .text span:first-child {}
         
         .progress-control .pro-bar {
             width: 150px;
@@ -256,7 +258,10 @@
                 </div>
                 <div class="info">
                     <div class="song-name">
-                        <span ng-bind-template="{{nowSong.name}} - {{nowSong.singer}}"></span>
+                        <div class="text" roll>
+                            <span ng-bind-template="{{nowSong.name}} - {{nowSong.singer}}"></span>
+                            <span></span>
+                        </div>
                     </div>
                     <div class="progress-control clearfix">
                         <div class="pro-bar">

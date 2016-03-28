@@ -173,8 +173,8 @@ angular.module('app.service', [])
     })
     .factory('Song', function ($http) {
         return {
-            getList: function (cb) {
-                $http.get(host + 'song/getList').success(function (res) {
+            getList: function (page, cb) {
+                $http.get(host + 'song/getList?page=' + page).success(function (res) {
                     cb(JSON.parse(res));
                 });
             }
@@ -205,6 +205,15 @@ angular.module('app.service', [])
             },
             detail: function (id, cb) {
                 $http.get(host + 'playlist/detail?id=' + id).success(function (res) {
+                    cb(JSON.parse(res));
+                });
+            },
+            updateSongs: function (sid, pid, action, cb) {
+                $http.post(host + 'playlist/updateSongs', {
+                    sid: sid,
+                    pid: pid,
+                    action: action
+                }).success(function (res) {
                     cb(JSON.parse(res));
                 });
             }

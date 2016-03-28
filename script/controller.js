@@ -107,7 +107,7 @@ angular.module('app.ctrls', ['app.service'])
     .controller('ctrl.music.pl', function ($scope) {
 
     })
-    .controller('ctrl.music.pl.detail', function ($scope, $routeParams, $location, Playlist) {
+    .controller('ctrl.music.pl.detail', function ($scope, $rootScope, $routeParams, $location, Playlist) {
         var id = $routeParams.id;
         if (id == 0) {
             $location.path('/other');
@@ -116,11 +116,48 @@ angular.module('app.ctrls', ['app.service'])
             $scope.plInfo = res.plInfo;
             $scope.plInfo.songList = res.songList;
         });
+
+        $scope.changePlayList = function (pl, sl) {
+            $rootScope.playlist = pl;
+            $rootScope.songList = sl;
+            $rootScope.nowSong = $rootScope.songList[0];
+            if ($rootScope.isPaused) {
+                $rootScope.player.play();
+            }
+        };
+
+        $scope.addToPl = function (pl) {
+            // 循环对比列表，加入未在原列表中的记录
+            var tempArr = [];
+            angular.forEach(pl, function (d, i) {
+                var flag = true;
+                angular.forEach($rootScope.songList, function (v, k) {
+                    if (d.id == v.id) {
+                        flag = false;
+                    }
+                });
+                if (flag) {
+                    tempArr.push(d);
+                }
+            });
+            $rootScope.songList = $rootScope.songList.concat(tempArr);
+        }
+
         $scope.title = '音乐详情';
     })
     .controller('ctrl.music.sl', function ($scope, Song) {
-        Song.getList(function (res) {
-            $scope.allSongs = res;
+        $scope.page = 0;
+
+        function getList() {
+            Song.getList($scope.page, function (res) {
+                $scope.allSongs = res.songList;
+                $scope.songCount = res.count;
+                $scope.pageNum = 10;
+            })
+        };
+
+        $scope.$watch('page', function () {
+            getList();
         });
     })
     .controller('ctrl.music.song.detail', function ($scope, $routeParams, $location) {
@@ -178,9 +215,6 @@ angular.module('app.ctrls', ['app.service'])
             });
         }
 
-        $scope.changePage = function (p) {
-            $scope.page = p;
-        };
         $scope.$watch('page', function () {
             getList();
         });
