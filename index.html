@@ -214,6 +214,7 @@
             </div>
             <div class="collapse navbar-collapse" id="navCollapse">
                 <ul class="nav navbar-nav">
+                    <!--
                     <li ng-class="{active:path == '/'}"><a href="#home">首页</a>
                     </li>
                     <li ng-class="{active:path.indexOf('/music')>=0}"><a href="#music">音乐</a>
@@ -221,6 +222,15 @@
                     <li ng-class="{active:path.indexOf('/movie')>=0}"><a href="#movie">电影</a>
                     </li>
                     <li ng-class="{active:path.indexOf('/blog')>=0}"><a href="#blog">博客</a>
+                    </li>
+-->
+                    <li data-id="home"><a href="#home">首页</a>
+                    </li>
+                    <li data-id="music"><a href="#music">音乐</a>
+                    </li>
+                    <li data-id="movie"><a href="#movie">电影</a>
+                    </li>
+                    <li data-id="blog"><a href="#blog">博客</a>
                     </li>
                 </ul>
                 <div class="nav-right" ng-hide='account.uid'>
@@ -305,7 +315,7 @@
                     cursorwidth: "6px", //像素光标的宽度 
                     cursorborder: "0", //     游标边框css定义 
                     cursorborderradius: "6px", //以像素为光标边界半径 
-                    autohidemode: false //是否隐藏滚动条 
+                    autohidemode: true //是否隐藏滚动条 
                 });
             </script>
         </div>

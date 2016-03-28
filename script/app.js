@@ -103,7 +103,27 @@ app.config(function ($routeProvider, $locationProvider) {
 
 app.run(['$rootScope', '$cookieStore', '$interval', '$timeout', '$location', '$document', 'Playlist', function ($rootScope, $cookieStore, $interval, $timeout, $location, $document, Playlist) {
     $rootScope.$on('$routeChangeSuccess', function (newV) {
-        $rootScope.path = $location.path();
+        var path = $rootScope.path = $location.path();
+        var lis = $('.navbar-nav').children();
+        $(lis).removeClass('active');
+
+        if (path.indexOf('/music') >= 0) {
+            $(lis[1]).addClass('active');
+        } else if (path.indexOf('/movie') >= 0) {
+            $(lis[2]).addClass('active');
+        } else if (path.indexOf('/blog') >= 0) {
+            $(lis[3]).addClass('active');
+        } else {
+            $(lis[0]).addClass('active');
+        }
+
+        //        for (var i = 0; i < lis.length; i++) {
+        //            if ($rootScope.path.indexOf($(lis[i]).attr('data-id')) >= 0) {
+        //                $(lis[i]).addClass('active');
+        //            } else {
+        //                $(lis[0]).addClass('active');
+        //            }
+        //        }
     });
 
     // 歌单，播放源，播放状态

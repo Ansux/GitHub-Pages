@@ -1,4 +1,19 @@
 angular.module('app.directives', ['app.service'])
+    .directive('siteNav', function () {
+        return {
+            link: function (scope, ele, attrs, ng) {
+                $(ele).children().click(function (e) {
+                    //console.log(e);
+                    //console.log($(this).attr('data-id'));
+                    $(this).siblings().removeClass('active');
+                    $(this).addClass('active');
+                });
+                //                ele[0].children.bind('click', function (e) {
+                //                    console.log(e);
+                //                });
+            }
+        }
+    })
     .directive('ensureUnique', ['$http', function ($http) {
         return {
             require: 'ngModel',
