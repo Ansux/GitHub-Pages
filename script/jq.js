@@ -7,6 +7,11 @@ $(function () {
         $("form[name='blogForm']")[0].reset()
     });
 
+    $('.navbar-nav').children().click(function (e) {
+        $(this).siblings().removeClass('active');
+        $(this).addClass('active');
+    });
+
     $("body").niceScroll({
         cursorcolor: "#ccc", //#CC0071 光标颜色 
         cursoropacitymax: 1, //改变不透明度非常光标处于活动状态（scrollabar“可见”状态），范围从1到0 
