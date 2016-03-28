@@ -116,14 +116,6 @@ app.run(['$rootScope', '$cookieStore', '$interval', '$timeout', '$location', '$d
         } else {
             $(lis[0]).addClass('active');
         }
-
-        //        for (var i = 0; i < lis.length; i++) {
-        //            if ($rootScope.path.indexOf($(lis[i]).attr('data-id')) >= 0) {
-        //                $(lis[i]).addClass('active');
-        //            } else {
-        //                $(lis[0]).addClass('active');
-        //            }
-        //        }
     });
 
     // 歌单，播放源，播放状态
