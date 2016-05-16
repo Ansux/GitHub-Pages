@@ -287,6 +287,7 @@ angular.module('app.ctrls', ['app.service'])
         };
 
         $scope.showBlogModal = function () {
+            $scope.showBlogForm = true;
             Category.getList(function (res) {
                 $scope.cateList = res;
                 if ($scope.cateList) {

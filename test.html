@@ -42,43 +42,45 @@
             <span>Nothing's Gonna dddfdsaf sdafsdaf</span>
         </div>
     </div>
-
+    <div class="">
+    <div class="container">
+    </div>
     <script>
         angular.module('myApp', [])
-            .directive('roll', function ($interval, $timeout) {
-                return {
-                    link: function (scope, ele, attrs, ng) {
-                        var left = ele[0].children[0].offsetWidth + 60;
-                        if (ele[0].parentNode.offsetWidth < ele[0].children[0].offsetWidth) {
-                            $(ele[0].children[0]).clone(true).appendTo(ele);
-                            scope.flag = true;
+        .directive('roll', function ($interval, $timeout) {
+            return {
+                link: function (scope, ele, attrs, ng) {
+                    var left = ele[0].children[0].offsetWidth + 60;
+                    if (ele[0].parentNode.offsetWidth < ele[0].children[0].offsetWidth) {
+                        $(ele[0].children[0]).clone(true).appendTo(ele);
+                        scope.flag = true;
 
-                            function time() {
-                                var i = 0;
-                                var timer;
-                                timer = $interval(function () {
-                                    $(ele).css('left', -8 * i);
-                                    i++;
-                                    if (ele[0].children[1].offsetParent.offsetLeft <= -left) {
-                                        $(ele).css('left', -(left));
-                                        $interval.cancel(timer);
-                                        scope.flag = false;
-                                    }
-                                }, 500);
-                            }
-                            scope.$watch('flag', function () {
-                                if (!scope.flag) {
-                                    $timeout(function () {
-                                        scope.flag = true;
-                                        time();
-                                    }, 3000);
+                        function time() {
+                            var i = 0;
+                            var timer;
+                            timer = $interval(function () {
+                                $(ele).css('left', -8 * i);
+                                i++;
+                                if (ele[0].children[1].offsetParent.offsetLeft <= -left) {
+                                    $(ele).css('left', -(left));
+                                    $interval.cancel(timer);
+                                    scope.flag = false;
                                 }
-                            });
+                            }, 500);
+                        }
+                        scope.$watch('flag', function () {
+                            if (!scope.flag) {
+                                $timeout(function () {
+                                    scope.flag = true;
+                                    time();
+                                }, 3000);
+                            }
+                        });
 
-                        };
-                    }
+                    };
                 }
-            });
+            }
+        });
     </script>
 
 </body>
