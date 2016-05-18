@@ -1,5 +1,5 @@
- var host = "http://localhost/ansux/1/index.php/blogs/";
- //var host = "http://ansux.sinaapp.com/blogs/";
+ // var host = "http://localhost/ansux/1/index.php/blogs/";
+ var host = "http://ftp536229.host509.zhujiwu.me/index.php/blogs/";
 
  angular.module('app.service', [])
      .factory('User', function ($http, $cookieStore, $rootScope) {
