@@ -1,5 +1,5 @@
  // var host = "http://localhost/ansux/1/index.php/blogs/";
- var host = "http://ansux.site/index.php/blogs/";
+ var host = "http://ansux.96.lt/blog/index.php/blogs/";
 
  angular.module('app.service', [])
      .factory('User', function ($http, $cookieStore, $rootScope) {
@@ -32,8 +32,8 @@
                  }).then(function (res) {
                      cb(JSON.parse(res.data));
                  })
-             },
-             getList: function (query, page, cb) {
+             }
+             , getList: function (query, page, cb) {
                  var queryString = '';
                  if (query !== null) {
                      queryString = '?' + query.action + '=' + query.id + '&page=' + page;
@@ -44,13 +44,13 @@
                  $http.get(host + 'blog/getlist' + queryString).then(function (res) {
                      cb(JSON.parse(res.data));
                  })
-             },
-             detail: function (id, cb) {
+             }
+             , detail: function (id, cb) {
                  $http.get(host + 'blog/detail?id=' + id).success(function (res) {
                      cb(JSON.parse(res));
                  });
-             },
-             createItem: function (blog) {
+             }
+             , createItem: function (blog) {
                  if (blog.length === undefined) {
                      addItem(blog);
                  } else if (blog.length > 0) {
@@ -71,8 +71,8 @@
                          '</div>');
                      // init Masonry
                      var $grid = $('.grid').masonry({
-                         itemSelector: '.grid-item',
-                         columnWidth: '.grid-item'
+                         itemSelector: '.grid-item'
+                         , columnWidth: '.grid-item'
                      });
                      // layout Masonry after each image loads
                      $grid.imagesLoaded().progress(function () {
@@ -89,8 +89,8 @@
                  $http.get(host + 'movie/api?name=' + name).then(function (res) {
                      cb(res.data);
                  });
-             },
-             create: function (model, cb) {
+             }
+             , create: function (model, cb) {
 
                  // 整理演员字符串
                  var actorForm = model.movie.actor;
@@ -115,13 +115,13 @@
                      }
                  };
                  $http.post(host + 'movie/create', {
-                     movie: model.movie,
-                     review: model.review
+                     movie: model.movie
+                     , review: model.review
                  }).then(function (res) {
                      cb(JSON.parse(res.data));
                  });
-             },
-             getList: function (page, uid, cb) {
+             }
+             , getList: function (page, uid, cb) {
                  var queryString = 'movie/getlist?page=' + page;
                  if (uid != null) {
                      queryString += '&uid=' + uid;
@@ -129,8 +129,8 @@
                  $http.get(host + queryString).then(function (res) {
                      cb(JSON.parse(res.data));
                  });
-             },
-             detail: function (id, uid, cb) {
+             }
+             , detail: function (id, uid, cb) {
                  var queryString = '?id=' + id;
                  if (uid !== undefined) {
                      queryString += ('&uid=' + uid);
@@ -150,8 +150,8 @@
                  }).then(function (res) {
                      cb(res);
                  });
-             },
-             edit: function (model, cb) {
+             }
+             , edit: function (model, cb) {
                  $http.post(host + 'MovieReview/edit', {
                      review: model
                  }).then(function (res) {
@@ -195,24 +195,24 @@
                  $http.get(host + 'playlist/getlist').success(function (res) {
                      cb(JSON.parse(res));
                  });
-             },
-             create: function (model, cb) {
+             }
+             , create: function (model, cb) {
                  $http.post(host + 'playlist/create', {
                      playlist: model
                  }).success(function (res) {
                      cb(JSON.parse(res));
                  });
-             },
-             detail: function (id, cb) {
+             }
+             , detail: function (id, cb) {
                  $http.get(host + 'playlist/detail?id=' + id).success(function (res) {
                      cb(JSON.parse(res));
                  });
-             },
-             updateSongs: function (sid, pid, action, cb) {
+             }
+             , updateSongs: function (sid, pid, action, cb) {
                  $http.post(host + 'playlist/updateSongs', {
-                     sid: sid,
-                     pid: pid,
-                     action: action
+                     sid: sid
+                     , pid: pid
+                     , action: action
                  }).success(function (res) {
                      cb(JSON.parse(res));
                  });
