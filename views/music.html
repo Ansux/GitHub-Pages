@@ -1,88 +1,88 @@
 <div class="music">
-    <style type="text/css">
-        .pl-btn {
-            float: right;
-            margin-right: 10px;
-            text-decoration: none;
-        }
-        
-        .pl-btn:hover {
-            color: darkcyan;
-        }
-        
-        .pl-btn i {
-            font-size: 15px;
-            margin-right: 3px;
-        }
-    </style>
-    <div class="player-container">
-        <div class="player">
-            <div class="cover" ng-click="player.toggle()">
-                <img ng-src="http://p3.music.126.net/{{nowSong.picurl}}?param=240y240" alt="{{nowSong.name}} ">
-            </div>
-            <div class="info ">
-                <h3 ng-bind="nowSong.name"></h3>
-                <p ng-bind="nowSong.singer"></p>
-            </div>
-            <div class="control clearfix ">
-                <a ng-click="player.pre()"><i class="fa fa-step-backward "></i></a>
-                <a ng-click="player.toggle()"><i class="fa " ng-class="{true: 'fa-play',false: 'fa-pause'}[audio.paused] "></i></a>
-                <a ng-click="player.next()"><i class="fa fa-step-forward "></i></a>
-                <a ng-click="like()"><i class="fa" ng-class="{true:'fa-heart',false:'fa-heart-o'}[true]"></i></a>
-            </div>
-            <div progress class="progress song-progress ">
-                <div class="progress-bar progress-bar-info " role="progressbar " aria-valuenow="{{100*audio.currentTime/audio.duration}}" aria-valuemin="0 " aria-valuemax="100 " style="width: {{100*audio.currentTime/audio.duration}}% ">
-                </div>
-            </div>
-            <div class="clearfix ">
-                <div class="times ">
-                    <span class="current-time " ng-bind="audio.currentTime|formatTime "></span>
-                    <em>/</em>
-                    <span ng-bind="audio.duration|formatTime"></span>
-                </div>
-                <div class="volume clearfix ">
-                    <a volume-toggle><i class="fa" ng-class="{true:'fa-volume-off',false:'fa-volume-up'}[audio.volume==0]"></i></a>
-                    <div volume class="progress">
-                        <div class="progress-bar progress-bar-info " role="progressbar " aria-valuenow="{{100*audio.volume}}" aria-valuemin="0 " aria-valuemax="100 " style="width:{{100*audio.volume}}% ">
-                        </div>
-                    </div>
-                </div>
-                <div class="share">
-                    <i class="fa fa-share-alt "></i>
-                </div>
-            </div>
+  <style type="text/css">
+    .pl-btn {
+      float: right;
+      margin-right: 10px;
+      text-decoration: none;
+    }
+
+    .pl-btn:hover {
+      color: darkcyan;
+    }
+
+    .pl-btn i {
+      font-size: 15px;
+      margin-right: 3px;
+    }
+  </style>
+  <div class="player-container">
+    <div class="player">
+      <div class="cover" ng-click="player.toggle()">
+        <img ng-src="http://p3.music.126.net/{{nowSong.picurl}}?param=240y240" alt="{{nowSong.name}} ">
+      </div>
+      <div class="info ">
+        <h3 ng-bind="nowSong.name"></h3>
+        <p ng-bind="nowSong.singer"></p>
+      </div>
+      <div class="control clearfix ">
+        <a ng-click="player.pre()"><i class="fa fa-step-backward "></i></a>
+        <a ng-click="player.toggle()"><i class="fa " ng-class="{true: 'fa-play',false: 'fa-pause'}[audio.paused] "></i></a>
+        <a ng-click="player.next()"><i class="fa fa-step-forward "></i></a>
+        <a ng-click="like()"><i class="fa" ng-class="{true:'fa-heart',false:'fa-heart-o'}[true]"></i></a>
+      </div>
+      <div progress class="progress song-progress ">
+        <div class="progress-bar progress-bar-info " role="progressbar " aria-valuenow="{{100*audio.currentTime/audio.duration}}" aria-valuemin="0 " aria-valuemax="100 " style="width: {{100*audio.currentTime/audio.duration}}% ">
         </div>
-        <div class="music-list">
-            <div class="pl-item">
-                <div class="head"><span>{{playlist.name}}</span>
-                    <a class="play-ico" ng-click="changePlayList(pl)"><i class="fa fa-play-circle-o" ng-class="{'fa-spin':!audio.paused}"></i></a>
-                    <a class="pl-btn" href="#music/pl"><i class="fa fa-refresh"></i>换台</a>
-                </div>
-                <div id="boxscroll" class="songlist">
-                    <ul>
-                        <li ng-repeat="song in songList" ng-click="player.changeSong(song)" ng-class="{ 'active':song==nowSong}">
-                            <span ng-if="song==nowSong"><i class="fa fa-volume-up"></i></span>
-                            <strong ng-hide="song==nowSong" ng-bind="$index+1|add0"></strong>{{song.name}}
-                        </li>
-                    </ul>
-                </div>
+      </div>
+      <div class="clearfix ">
+        <div class="times ">
+          <span class="current-time " ng-bind="audio.currentTime|formatTime "></span>
+          <em>/</em>
+          <span ng-bind="audio.duration|formatTime"></span>
+        </div>
+        <div class="volume clearfix ">
+          <a volume-toggle><i class="fa" ng-class="{true:'fa-volume-off',false:'fa-volume-up'}[audio.volume==0]"></i></a>
+          <div volume class="progress">
+            <div class="progress-bar progress-bar-info " role="progressbar " aria-valuenow="{{100*audio.volume}}" aria-valuemin="0 " aria-valuemax="100 " style="width:{{100*audio.volume}}% ">
             </div>
-            <script>
-                $("#boxscroll").niceScroll({
-                    cursorcolor: "#ccc", //#CC0071 光标颜色 
-                    cursoropacitymax: 1, //改变不透明度非常光标处于活动状态（scrollabar“可见”状态），范围从1到0 
-                    touchbehavior: false, //使光标拖动滚动像在台式电脑触摸设备 
-                    cursorwidth: "6px", //像素光标的宽度 
-                    cursorborder: "0", //     游标边框css定义 
-                    cursorborderradius: "6px", //以像素为光标边界半径 
-                    autohidemode: false //是否隐藏滚动条 
-                });
-            </script>
-            <!--
+          </div>
+        </div>
+        <div class="share">
+          <i class="fa fa-share-alt "></i>
+        </div>
+      </div>
+    </div>
+    <div class="music-list">
+      <div class="pl-item">
+        <div class="head"><span>{{playlist.name}}</span>
+          <a class="play-ico" ng-click="changePlayList(pl)"><i class="fa fa-play-circle-o" ng-class="{'fa-spin':!audio.paused}"></i></a>
+          <a class="pl-btn" href="#music/pl"><i class="fa fa-refresh"></i>换台</a>
+        </div>
+        <div id="boxscroll" class="songlist">
+          <ul>
+            <li ng-repeat="song in songList" ng-click="player.changeSong(song)" ng-class="{ 'active':song==nowSong}">
+              <span ng-if="song==nowSong"><i class="fa fa-volume-up"></i></span>
+              <strong ng-hide="song==nowSong" ng-bind="$index+1|add0"></strong>{{song.name}}
+            </li>
+          </ul>
+        </div>
+      </div>
+      <script>
+        $("#boxscroll").niceScroll({
+          cursorcolor: "#ccc", //#CC0071 光标颜色
+          cursoropacitymax: 1, //改变不透明度非常光标处于活动状态（scrollabar“可见”状态），范围从1到0
+          touchbehavior: false, //使光标拖动滚动像在台式电脑触摸设备
+          cursorwidth: "6px", //像素光标的宽度
+          cursorborder: "0", //     游标边框css定义
+          cursorborderradius: "6px", //以像素为光标边界半径
+          autohidemode: false //是否隐藏滚动条
+        });
+      </script>
+      <!--
             <ul>
                 <li ng-repeat=" m in musicList|limitTo:8 " ng-click="player.changeSong(m)" ng-class="{ 'active':m==nowSong} "><span ng-if="m==nowSong "><i class="fa fa-volume-up "></i></span>{{m.name}}</li>
             </ul>
             -->
-        </div>
     </div>
+  </div>
 </div>

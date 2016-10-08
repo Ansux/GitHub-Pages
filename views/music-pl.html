@@ -1,27 +1,27 @@
 <div class="pl-box">
-    <div class="title col-xs-12">
-        <a><i class="fa fa-reorder"></i>全部歌单</a>
-        <a class="pull-right" href="#music"><i class="fa fa-reply"></i>播放器</a>
-        <a href="#music/sl" class="pull-right"><i class="fa fa-music"></i>所有歌曲</a>
-    </div>
-    <div class="pl-list">
-        <div class="col-md-3 col-xs-4" ng-repeat="pl in playlists">
-            <div class="pl-item">
-                <div class="cover" cover-hover>
-                    <a href="#/music/pl/{{pl.id}}">
-                        <img src="http://p3.music.126.net/jIL1g_Wsn28I2XrC6B0ZCg==/5774635069303556.jpg?param=200y200" alt="">
-                    </a>
-                    <div class="creator">
-                        <i class="fa fa-user"></i> {{pl.uid}}
-                    </div>
-                    <div class="play-btn">
-                        <i class="fa fa-play-circle-o"></i>
-                    </div>
-                </div>
-                <div class="name">
-                    {{pl.name}}
-                </div>
-            </div>
+  <div class="title col-xs-12">
+    <a><i class="fa fa-reorder"></i>全部歌单</a>
+    <a class="pull-right" href="#music"><i class="fa fa-reply"></i>播放器</a>
+    <a href="#music/sl" class="pull-right"><i class="fa fa-music"></i>所有歌曲</a>
+  </div>
+  <div class="pl-list">
+    <div class="col-md-3 col-xs-4" ng-repeat="pl in playlists">
+      <div class="pl-item">
+        <div class="cover" cover-hover>
+          <a href="#/music/pl/{{pl.id}}">
+            <img src="http://p3.music.126.net/jIL1g_Wsn28I2XrC6B0ZCg==/5774635069303556.jpg?param=200y200" alt="">
+          </a>
+          <div class="creator">
+            <i class="fa fa-user"></i> {{pl.uid}}
+          </div>
+          <div class="play-btn">
+            <i class="fa fa-play-circle-o"></i>
+          </div>
         </div>
+        <div class="name">
+          {{pl.name}}
+        </div>
+      </div>
     </div>
+  </div>
 </div>

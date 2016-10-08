@@ -1,27 +1,27 @@
 <div class="blog-detail">
-    <div class="title">
-        <h1>{{blogInfo.title}}</h1>
-    </div>
-    <div class="blog-info clearfix">
-        <ul>
-            <li>
-                <i class="fa fa-tag"></i>
-                <a ng-href="#/blog/cate/{{blogInfo.category}}">{{blogInfo.cname}}</a>
-            </li>
-            <li>
-                <i class="fa fa-user"></i>
-                <a ng-href="#/blog/author/{{blogInfo.author}}">{{blogInfo.uid}}</a>
-            </li>
-            <li>
-                <i class="fa fa-calendar"></i> {{blogInfo.createat}}
-            </li>
-            <li>
-                <i class="fa fa-eye"></i> {{blogInfo.pviews}}
-            </li>
-            <li>
-                <i class="fa fa-spinner fa-spin"></i>
-            </li>
-        </ul>
-    </div>
-    <div ng-bind-html="blogInfo.content|toStrusted"></div>
+  <div class="title">
+    <h1>{{blogInfo.title}}</h1>
+  </div>
+  <div class="blog-info clearfix">
+    <ul>
+      <li>
+        <i class="fa fa-tag"></i>
+        <a ng-href="#/blog/cate/{{blogInfo.category}}">{{blogInfo.cname}}</a>
+      </li>
+      <li>
+        <i class="fa fa-user"></i>
+        <a ng-href="#/blog/author/{{blogInfo.author}}">{{blogInfo.uid}}</a>
+      </li>
+      <li>
+        <i class="fa fa-calendar"></i> {{blogInfo.createat}}
+      </li>
+      <li>
+        <i class="fa fa-eye"></i> {{blogInfo.pviews}}
+      </li>
+      <li>
+        <i class="fa fa-spinner fa-spin"></i>
+      </li>
+    </ul>
+  </div>
+  <div ng-bind-html="blogInfo.content|toStrusted"></div>
 </div>

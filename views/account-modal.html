@@ -1,81 +1,81 @@
 <div class="modal fade" id="signupModal" data-backdrop="false" ng-controller='ctrl.signup'>
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form class="form-horizontal" name="signupForm" ng-submit='submit()'>
-                <div class="modal-header">
-                    <button class="close" data-dismiss='modal' aria-label="Close"><span aria-hidden='true'>&times;</span>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form class="form-horizontal" name="signupForm" ng-submit='submit()'>
+        <div class="modal-header">
+          <button class="close" data-dismiss='modal' aria-label="Close"><span aria-hidden='true'>&times;</span>
                     </button>
-                    <h4 class="modal-title">用户注册</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group" ng-class="{'has-error':signupForm.uid.$dirty&&signupForm.uid.$invalid}">
-                        <label for="" class="col-sm-2 control-label">登录名</label>
-
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="uid" ensure-unique="user" ng-model='user.uid' ng-maxlength='15' required>
-                        </div>
-                    </div>
-                    <div class="form-group" ng-class="{'has-error':signupForm.upwd.$dirty&&signupForm.upwd.$invalid}">
-                        <label for="" class="col-sm-2 control-label">密码</label>
-
-                        <div class="col-sm-10">
-                            <input type="password" class="form-control" name="upwd" ng-model='user.upwd' ng-minlength='3' required>
-                        </div>
-                    </div>
-                    <div class="form-group" ng-class="{'has-error':signupForm.pwd.$dirty&&user.upwd!=user.pwd}">
-                        <label for="" class="col-sm-2 control-label">确认密码</label>
-
-                        <div class="col-sm-10">
-                            <input type="password" class="form-control" name="pwd" ng-model='user.pwd'>
-                        </div>
-                    </div>
-                    <div class="form-group" ng-class="{'has-error':signupForm.email.$dirty&&signupForm.email.$invalid}">
-                        <label for="" class="col-sm-2 control-label">邮箱</label>
-
-                        <div class="col-sm-10">
-                            <input type="email" class="form-control" name="email" ng-model='user.email' required>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-default" data-dismiss='modal' type="button">关闭</button>
-                    <button class="btn btn-danger" type="submit" ng-disabled="signupForm.$invalid||user.upwd!=user.pwd"><span>立即注册</span>
-                    </button>
-                </div>
-            </form>
+          <h4 class="modal-title">用户注册</h4>
         </div>
+        <div class="modal-body">
+          <div class="form-group" ng-class="{'has-error':signupForm.uid.$dirty&&signupForm.uid.$invalid}">
+            <label for="" class="col-sm-2 control-label">登录名</label>
+
+            <div class="col-sm-10">
+              <input type="text" class="form-control" name="uid" ensure-unique="user" ng-model='user.uid' ng-maxlength='15' required>
+            </div>
+          </div>
+          <div class="form-group" ng-class="{'has-error':signupForm.upwd.$dirty&&signupForm.upwd.$invalid}">
+            <label for="" class="col-sm-2 control-label">密码</label>
+
+            <div class="col-sm-10">
+              <input type="password" class="form-control" name="upwd" ng-model='user.upwd' ng-minlength='3' required>
+            </div>
+          </div>
+          <div class="form-group" ng-class="{'has-error':signupForm.pwd.$dirty&&user.upwd!=user.pwd}">
+            <label for="" class="col-sm-2 control-label">确认密码</label>
+
+            <div class="col-sm-10">
+              <input type="password" class="form-control" name="pwd" ng-model='user.pwd'>
+            </div>
+          </div>
+          <div class="form-group" ng-class="{'has-error':signupForm.email.$dirty&&signupForm.email.$invalid}">
+            <label for="" class="col-sm-2 control-label">邮箱</label>
+
+            <div class="col-sm-10">
+              <input type="email" class="form-control" name="email" ng-model='user.email' required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-default" data-dismiss='modal' type="button">关闭</button>
+          <button class="btn btn-danger" type="submit" ng-disabled="signupForm.$invalid||user.upwd!=user.pwd"><span>立即注册</span>
+                    </button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
 <div class="modal fade" id="signinModal" data-backdrop="false" ng-controller='ctrl.signin'>
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form class="form-horizontal" name="signinForm" ng-submit='submit()'>
-                <div class="modal-header">
-                    <button class="close" data-dismiss='modal' aria-label="Close"><span aria-hidden='true'>&times;</span>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form class="form-horizontal" name="signinForm" ng-submit='submit()'>
+        <div class="modal-header">
+          <button class="close" data-dismiss='modal' aria-label="Close"><span aria-hidden='true'>&times;</span>
                     </button>
-                    <h4 class="modal-title">用户登录</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group" ng-class="{'has-error':signinForm.uid.$dirty&&signinForm.uid.$invalid}">
-                        <label for="" class="col-sm-2 control-label">登录名</label>
-
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="uid" ng-model='user.uid' ng-maxlength='15' required>
-                        </div>
-                    </div>
-                    <div class="form-group" ng-class="{'has-error':signinForm.upwd.$dirty&&signinForm.upwd.$invalid}">
-                        <label for="" class="col-sm-2 control-label">密码</label>
-
-                        <div class="col-sm-10">
-                            <input type="password" class="form-control" name="upwd" ng-model='user.upwd' ng-minlength='3' required>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-default" data-dismiss='modal' type="button">关闭</button>
-                    <button class="btn btn-danger" type="submit" ng-disabled="signinForm.$invalid"><span ng-if="!loading">立即登录</span><span ng-if="loading"><i class="fa fa-spinner fa-spin"></i> 正在登录</span></button>
-                </div>
-            </form>
+          <h4 class="modal-title">用户登录</h4>
         </div>
+        <div class="modal-body">
+          <div class="form-group" ng-class="{'has-error':signinForm.uid.$dirty&&signinForm.uid.$invalid}">
+            <label for="" class="col-sm-2 control-label">登录名</label>
+
+            <div class="col-sm-10">
+              <input type="text" class="form-control" name="uid" ng-model='user.uid' ng-maxlength='15' required>
+            </div>
+          </div>
+          <div class="form-group" ng-class="{'has-error':signinForm.upwd.$dirty&&signinForm.upwd.$invalid}">
+            <label for="" class="col-sm-2 control-label">密码</label>
+
+            <div class="col-sm-10">
+              <input type="password" class="form-control" name="upwd" ng-model='user.upwd' ng-minlength='3' required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-default" data-dismiss='modal' type="button">关闭</button>
+          <button class="btn btn-danger" type="submit" ng-disabled="signinForm.$invalid"><span ng-if="!loading">立即登录</span><span ng-if="loading"><i class="fa fa-spinner fa-spin"></i> 正在登录</span></button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>

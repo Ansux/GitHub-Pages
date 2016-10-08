@@ -1,157 +1,157 @@
 <style>
-    .pl-detail {
-        position: relative;
-        min-height: 200px;
-        margin-bottom: 20px;
-    }
-    
-    .pl-detail .cover {
-        position: absolute;
-        left: 0px;
-        top: 0px;
-        width: 200px;
-    }
-    
-    .pl-detail .cover img {
-        width: 100%;
-    }
-    
-    .pl-detail .info {
-        margin-left: 220px;
-    }
-    
-    .pl-detail .play-btn {}
-    
-    .pl-detail .play-btn a {
-        height: 24px;
-        line-height: 24px;
-        color: #eee;
-        text-decoration: none;
-        display: block;
-        float: left;
-        background: #25272B;
-        padding: 0px 8px;
-    }
-    
-    .pl-detail .play-btn a.play-all {
-        font-size: 12px;
-        border-right: solid 1px #eee;
-        border-radius: 5px 0px 0px 5px;
-    }
-    
-    .pl-detail .play-btn a.play-all i {
-        font-size: 14px;
-        margin-right: 5px;
-    }
-    
-    .pl-detail .play-btn a.add-to-pl {
-        border-radius: 0px 5px 5px 0px;
-    }
-    
-    .pl-detail .title h1 {
-        font-size: 22px;
-        margin-top: 0px;
-    }
-    
-    .create-info {
-        margin-bottom: 10px;
-    }
-    
-    .pl-detail .creator {
-        height: 32px;
-        float: left;
-    }
-    
-    .create-info .face {
-        display: inline-block;
-        width: 32px;
-        height: 32px;
-    }
-    
-    .create-time {
-        float: left;
-        line-height: 32px;
-        margin-left: 15px;
-        color: #999;
-    }
-    
-    .create-info .face img {
-        width: 100%;
-        border-radius: 100%;
-    }
-    
-    .create-info .uid {
-        margin-left: 5px;
-        color: #666;
-    }
-    
-    .pl-detail .tags {
-        margin: 10px 0;
-        font-size: 12px;
-    }
-    
-    .pl-detail .desc {
-        line-height: 1.5;
-        font-size: 12px;
-    }
+  .pl-detail {
+    position: relative;
+    min-height: 200px;
+    margin-bottom: 20px;
+  }
+
+  .pl-detail .cover {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 200px;
+  }
+
+  .pl-detail .cover img {
+    width: 100%;
+  }
+
+  .pl-detail .info {
+    margin-left: 220px;
+  }
+
+  .pl-detail .play-btn {}
+
+  .pl-detail .play-btn a {
+    height: 24px;
+    line-height: 24px;
+    color: #eee;
+    text-decoration: none;
+    display: block;
+    float: left;
+    background: #25272B;
+    padding: 0px 8px;
+  }
+
+  .pl-detail .play-btn a.play-all {
+    font-size: 12px;
+    border-right: solid 1px #eee;
+    border-radius: 5px 0px 0px 5px;
+  }
+
+  .pl-detail .play-btn a.play-all i {
+    font-size: 14px;
+    margin-right: 5px;
+  }
+
+  .pl-detail .play-btn a.add-to-pl {
+    border-radius: 0px 5px 5px 0px;
+  }
+
+  .pl-detail .title h1 {
+    font-size: 22px;
+    margin-top: 0px;
+  }
+
+  .create-info {
+    margin-bottom: 10px;
+  }
+
+  .pl-detail .creator {
+    height: 32px;
+    float: left;
+  }
+
+  .create-info .face {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+  }
+
+  .create-time {
+    float: left;
+    line-height: 32px;
+    margin-left: 15px;
+    color: #999;
+  }
+
+  .create-info .face img {
+    width: 100%;
+    border-radius: 100%;
+  }
+
+  .create-info .uid {
+    margin-left: 5px;
+    color: #666;
+  }
+
+  .pl-detail .tags {
+    margin: 10px 0;
+    font-size: 12px;
+  }
+
+  .pl-detail .desc {
+    line-height: 1.5;
+    font-size: 12px;
+  }
 </style>
 <div class="pl-detail clearfix">
-    <div class="cover">
-        <img ng-src="http://p3.music.126.net/jIL1g_Wsn28I2XrC6B0ZCg==/5774635069303556.jpg?param=200y200" alt="">
+  <div class="cover">
+    <img ng-src="http://p3.music.126.net/jIL1g_Wsn28I2XrC6B0ZCg==/5774635069303556.jpg?param=200y200" alt="">
+  </div>
+  <div class="info">
+    <div class="title">
+      <h1 ng-bind="plInfo.name"></h1>
     </div>
-    <div class="info">
-        <div class="title">
-            <h1 ng-bind="plInfo.name"></h1>
-        </div>
-        <div class="create-info clearfix">
-            <div class="creator">
-                <a class="face" href=""><img ng-src="{{plInfo.face}}" alt=""></a>
-                <a class="uid" href="" ng-bind="plInfo.uid"></a>
-            </div>
-            <div class="create-time" ng-bind="plInfo.createat|limitTo:10"></div>
-        </div>
-        <div class="control">
-            <div class="play-btn clearfix">
-                <a ng-click="changePlayList(plInfo,plInfo.songList)" class="play-all"><i class="fa fa-play-circle-o"></i>播放全部</a>
-                <a ng-click="addToPl(plInfo.songList)" class="add-to-pl"><i class="fa fa-plus"></i></a>
-            </div>
-        </div>
-        <div class="tags">
-            <span>标签：</span>
-            <a href="">KTV</a>
-        </div>
-        <div class="desc">
-            <span>简介：</span> 不知不觉，不知时第几个年头，染上了感伤，恋上了怀旧，喜欢写怀旧的文字，听经典的老歌，看俗套过气的电影，拍黑白镜头的老照片，喜欢淡淡的花香，喜欢恬淡的季节，喜欢安静的山水，听禅鸣耳语，看雪花染白大地，漂白银灰色天空，漂白暗黄的心境，让心飘飞千树梨花，纯洁一片寂寞寒冬，感动平凡清淡的人生。
-        </div>
+    <div class="create-info clearfix">
+      <div class="creator">
+        <a class="face" href=""><img ng-src="{{plInfo.face}}" alt=""></a>
+        <a class="uid" href="" ng-bind="plInfo.uid"></a>
+      </div>
+      <div class="create-time" ng-bind="plInfo.createat|limitTo:10"></div>
     </div>
+    <div class="control">
+      <div class="play-btn clearfix">
+        <a ng-click="changePlayList(plInfo,plInfo.songList)" class="play-all"><i class="fa fa-play-circle-o"></i>播放全部</a>
+        <a ng-click="addToPl(plInfo.songList)" class="add-to-pl"><i class="fa fa-plus"></i></a>
+      </div>
+    </div>
+    <div class="tags">
+      <span>标签：</span>
+      <a href="">KTV</a>
+    </div>
+    <div class="desc">
+      <span>简介：</span> 不知不觉，不知时第几个年头，染上了感伤，恋上了怀旧，喜欢写怀旧的文字，听经典的老歌，看俗套过气的电影，拍黑白镜头的老照片，喜欢淡淡的花香，喜欢恬淡的季节，喜欢安静的山水，听禅鸣耳语，看雪花染白大地，漂白银灰色天空，漂白暗黄的心境，让心飘飞千树梨花，纯洁一片寂寞寒冬，感动平凡清淡的人生。
+    </div>
+  </div>
 </div>
 <div class="s-list">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>序号</th>
-                <th>喜欢</th>
-                <th>歌名</th>
-                <th>歌手</th>
-                <th>评论数</th>
-                <th>时长</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="s in plInfo.songList">
-                <td>
-                    <span ng-if="s==nowSong"><i class="fa fa-volume-up"></i></span>
-                    <span ng-hide="s==nowSong" ng-bind="$index+1|add0"></span>
-                </td>
-                <td>
-                    <i class="fa fa-heart-o"></i>
-                    <i class="fa fa-minus-square-o"></i>
-                </td>
-                <td ng-bind="s.name"></td>
-                <td ng-bind="s.singer"></td>
-                <td ng-bind="s.comments"></td>
-                <td ng-bind="(s.playtime/1000)|formatTime"></td>
-            </tr>
-        </tbody>
-    </table>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>序号</th>
+        <th>喜欢</th>
+        <th>歌名</th>
+        <th>歌手</th>
+        <th>评论数</th>
+        <th>时长</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="s in plInfo.songList">
+        <td>
+          <span ng-if="s==nowSong"><i class="fa fa-volume-up"></i></span>
+          <span ng-hide="s==nowSong" ng-bind="$index+1|add0"></span>
+        </td>
+        <td>
+          <i class="fa fa-heart-o"></i>
+          <i class="fa fa-minus-square-o"></i>
+        </td>
+        <td ng-bind="s.name"></td>
+        <td ng-bind="s.singer"></td>
+        <td ng-bind="s.comments"></td>
+        <td ng-bind="(s.playtime/1000)|formatTime"></td>
+      </tr>
+    </tbody>
+  </table>
 </div>

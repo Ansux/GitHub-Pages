@@ -1,35 +1,35 @@
 <style>
-    .loading {
-        clear: both;
-        text-align: center;
-    }
-    
-    .loading .msg {
-        padding: 12px 40px;
-        font-size: 15px;
-        color: #666;
-        border-radius: 10px;
-        border: solid 1px #eee;
-        display: inline-block;
-    }
-    
-    .loading .msg:hover {
-        color: #333;
-        border-color: #ccc;
-        background: #efefef;
-    }
+  .loading {
+    clear: both;
+    text-align: center;
+  }
+
+  .loading .msg {
+    padding: 12px 40px;
+    font-size: 15px;
+    color: #666;
+    border-radius: 10px;
+    border: solid 1px #eee;
+    display: inline-block;
+  }
+
+  .loading .msg:hover {
+    color: #333;
+    border-color: #ccc;
+    background: #efefef;
+  }
 </style>
 <div class="blog">
-    <p>{{title}} <a require-login data-toggle="modal" target="#blogModal" ng-click='showBlogModal()'>添加博客</a>
-    </p>
-    <div class="clearfix row grid">
+  <p>{{title}} <a require-login data-toggle="modal" target="#blogModal" ng-click='showBlogModal()'>添加博客</a>
+  </p>
+  <div class="clearfix row grid">
+  </div>
+  <div class="loading">
+    <div class="msg">
+      <span ng-if="!loading" ng-click="loadMore()">加载更多</span>
+      <span ng-if="loading&&msg===undefind"><i class="fa fa-spinner fa-spin"></i> 正在加载中</span>
+      <span ng-if="loading" ng-bind="msg"></span>
     </div>
-    <div class="loading">
-        <div class="msg">
-            <span ng-if="!loading" ng-click="loadMore()">加载更多</span>
-            <span ng-if="loading&&msg===undefind"><i class="fa fa-spinner fa-spin"></i> 正在加载中</span>
-            <span ng-if="loading" ng-bind="msg"></span>
-        </div>
-    </div>
+  </div>
 </div>
 <div ng-if="showBlogForm" ng-include="'views/blog-modal.html'"></div>
